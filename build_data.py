@@ -2,9 +2,18 @@
 """
 Build data.json for the IR/Politics course comparison site.
 
-Inputs (in ../output/):
+Inputs (in this same folder — flat layout, no ../output/):
   - ir_courses_final_target_list.csv   master list of 267 target courses
-  - modules_flat_bucketed.csv          cleaned, bucketed module rows (subset of courses)
+  - modules_flat_bucketed.csv          cleaned, bucketed module rows (preferred)
+      falls back to modules_flat.csv if the bucketed file isn't present yet
+      (bucket_1/bucket_2 columns are then treated as empty — every module
+      shows up unbucketed until you run the bucket-review pass)
+  - atlas_data.json                    OPTIONAL: institution -> region lookup,
+      borrowed from the earlier IR Course Atlas project, purely for the Map
+      tab. Not present right now, so every institution falls back to
+      "Unknown region" until you track that file down and drop it in here.
+      (Deliberately NOT named data.json — that name is this script's own
+      output, so reusing it would make the script overwrite its own input.)
 
 Output:
   - data.json  (in this folder, alongside index.html)
@@ -13,7 +22,9 @@ Re-run this after any future scrape + re-clean + re-bucket cycle to refresh the 
 """
 import csv
 import json
+import os
 import re
+import sys
 from collections import OrderedDict, defaultdict
 
 BUCKETS = [
@@ -35,11 +46,41 @@ def slugify(inst, course):
     s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
     return s
 
+def load_region_by_institution():
+    """Region per institution, borrowed from the earlier IR Course Atlas
+    dataset (atlas_data.json) purely for the Map view -- we don't pull
+    in any of its ranking/fee/entry-requirement fields, just geography.
+    Optional: if the file isn't here, every institution is "Unknown"."""
+    try:
+        with open("atlas_data.json", encoding="utf-8") as f:
+            atlas = json.load(f)
+        return {d["inst"]: d.get("region") for d in atlas if d.get("region")}
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("note: atlas_data.json not found -- Map tab will show every institution as 'Unknown region'")
+        return {}
+
+def load_modules():
+    """Prefer the bucketed file; fall back to the pre-bucket flat file with
+    a warning. Either way, missing bucket_1/bucket_2 columns are treated as
+    blank rather than raising, so the site still builds -- just without
+    bucket tagging until the review pass is done."""
+    if os.path.exists("modules_flat_bucketed.csv"):
+        with open("modules_flat_bucketed.csv", newline="", encoding="utf-8") as f:
+            return list(csv.DictReader(f))
+    if os.path.exists("modules_flat.csv"):
+        print("note: modules_flat_bucketed.csv not found -- using modules_flat.csv instead.")
+        print("      This file has no bucket_1/bucket_2 columns, so every module will show up")
+        print("      unbucketed (no Security & Conflict / IR Theory / etc. tags) until you run")
+        print("      the bucket-review pass and save the result as modules_flat_bucketed.csv.")
+        with open("modules_flat.csv", newline="", encoding="utf-8") as f:
+            return list(csv.DictReader(f))
+    sys.exit("error: neither modules_flat_bucketed.csv nor modules_flat.csv found in this folder")
+
 def main():
-    with open("../output/ir_courses_final_target_list.csv", newline="", encoding="utf-8") as f:
+    with open("ir_courses_final_target_list.csv", newline="", encoding="utf-8") as f:
         target = list(csv.DictReader(f))
-    with open("../output/modules_flat_bucketed.csv", newline="", encoding="utf-8") as f:
-        mods = list(csv.DictReader(f))
+    mods = load_modules()
+    region_by_inst = load_region_by_institution()
 
     mods_by_course = defaultdict(list)
     for r in mods:
@@ -58,7 +99,7 @@ def main():
         bucket_counts = defaultdict(int)
         for m in rows:
             y = (m["year"] or "").strip() or "Unspecified"
-            bucket_list = [b for b in (m["bucket_1"], m["bucket_2"]) if b and b != "Uncategorized"]
+            bucket_list = [b for b in (m.get("bucket_1", ""), m.get("bucket_2", "")) if b and b != "Uncategorized"]
             for b in bucket_list:
                 bucket_counts[b] += 1
             years[y].append({
@@ -76,6 +117,7 @@ def main():
             "institution": inst,
             "course_name": course_name,
             "url": url,
+            "region": region_by_inst.get(inst) or "Unknown",
             "badges": (r.get("badges") or "").strip(),
             "partner_subjects": (r.get("partner_subjects") or "").strip(),
             "has_modules": len(rows) > 0,

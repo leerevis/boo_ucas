@@ -4,20 +4,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#16233B;
-    --ink-soft:#3B4A63;
-    --paper:#E9EDEC;
-    --paper-raised:#FFFFFF;
-    --paper-sunken:#DDE3E1;
-    --line:#C7CFCC;
-    --brass:#9C7229;
-    --brass-strong:#7E5B1F;
-    --sea:#2F6058;
-    --sea-soft:#DCE7E4;
-    --brick:#9A3B2E;
-    --brick-soft:#F3E1DD;
-    --good:#2E6B4F;
-    --good-soft:#DEEBE3;
+    --ink:#16233B; --ink-soft:#3B4A63; --paper:#E9EDEC; --paper-raised:#FFFFFF; --paper-sunken:#DDE3E1;
+    --line:#C7CFCC; --brass:#9C7229; --brass-strong:#7E5B1F; --sea:#2F6058; --sea-soft:#DCE7E4;
+    --brick:#9A3B2E; --brick-soft:#F3E1DD; --good:#2E6B4F; --good-soft:#DEEBE3;
     --shadow: 0 1px 2px rgba(22,35,59,0.06), 0 6px 20px -8px rgba(22,35,59,0.18);
     --radius: 10px;
     --serif: "Spectral", Georgia, "Times New Roman", serif;
@@ -41,11 +30,7 @@
 
   *{ box-sizing:border-box; }
   ::selection{ background:var(--brass); color:var(--paper-raised); }
-  body{
-    margin:0; background:var(--paper); color:var(--ink);
-    font-family:var(--sans); font-size:15px; line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased; }
   a{ color:var(--sea); }
   h1,h2,h3{ font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink); }
   button, select, input{ font-family:var(--sans); }
@@ -54,92 +39,126 @@
 
   /* ---------- Masthead ---------- */
   .masthead{ border-bottom:1px solid var(--line); background:var(--paper-raised); }
-  .masthead-inner{
-    max-width:1180px; margin:0 auto; padding:28px 24px 20px;
-    display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
-  }
+  .masthead-inner{ max-width:1240px; margin:0 auto; padding:24px 24px 18px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; }
   .brand{ display:flex; align-items:center; gap:14px; }
-  .mark{ width:40px; height:40px; flex:none; }
-  .brand h1{ font-size:26px; font-weight:600; letter-spacing:0.2px; }
-  .brand .eyebrow{
-    font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;
-    color:var(--brass-strong); margin:0 0 2px;
-  }
-  .masthead-meta{ font-size:13px; color:var(--ink-soft); max-width:460px; text-align:right; line-height:1.5; }
+  .mark{ width:38px; height:38px; flex:none; }
+  .brand h1{ font-size:24px; font-weight:600; letter-spacing:0.2px; }
+  .brand .eyebrow{ font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--brass-strong); margin:0 0 2px; }
+  .masthead-meta{ font-size:12.5px; color:var(--ink-soft); max-width:440px; text-align:right; line-height:1.5; }
   .masthead-meta strong{ color:var(--ink); }
+  .bookmark-btn{
+    position:relative; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink-soft);
+    border-radius:8px; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;
+  }
+  .bookmark-btn:hover{ border-color:var(--brass); color:var(--brass-strong); }
+  .bookmark-btn .n{ font-family:var(--mono); }
+  .bookmark-panel{
+    position:absolute; top:calc(100% + 8px); right:0; width:320px; max-height:400px; overflow-y:auto;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+    z-index:40; padding:6px;
+  }
+  .bookmark-panel[hidden]{ display:none; }
+  .bookmark-row{ display:flex; align-items:flex-start; gap:8px; padding:9px 10px; border-radius:8px; }
+  .bookmark-row:hover{ background:var(--paper-sunken); }
+  .bookmark-row .bi{ flex:1 1 auto; min-width:0; }
+  .bookmark-row .bi .c{ font-weight:600; font-size:13px; display:block; }
+  .bookmark-row .bi .u{ font-size:11.5px; color:var(--ink-soft); display:block; }
+  .bookmark-row .unstar{ flex:none; border:0; background:transparent; color:var(--ink-soft); cursor:pointer; font-size:15px; padding:2px 4px; }
+  .bookmark-empty{ padding:16px; text-align:center; font-size:12.5px; color:var(--ink-soft); }
 
-  /* ---------- Controls ---------- */
+  /* ---------- Controls / tabs ---------- */
   .controls{ position:sticky; top:0; z-index:20; background:var(--paper); border-bottom:1px solid var(--line); }
-  .controls-inner{ max-width:1180px; margin:0 auto; padding:14px 24px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-  .search-wrap{ position:relative; flex:1 1 260px; min-width:200px; }
-  .search-wrap svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:0.55; }
-  input[type="search"], input[type="text"]{
-    width:100%; padding:10px 12px 10px 36px; border-radius:8px; border:1px solid var(--line);
-    background:var(--paper-raised); color:var(--ink); font-size:14px;
-  }
-  select{ padding:10px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink); font-size:14px; }
+  .controls-inner{ max-width:1240px; margin:0 auto; padding:12px 24px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:relative; }
   .view-toggle{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; flex:none; }
-  .view-toggle button{
-    border:0; background:var(--paper-raised); color:var(--ink-soft); padding:9px 14px; font-size:13px; font-weight:600;
-    cursor:pointer; border-right:1px solid var(--line);
-  }
+  .view-toggle button{ border:0; background:var(--paper-raised); color:var(--ink-soft); padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer; border-right:1px solid var(--line); white-space:nowrap; }
   .view-toggle button:last-child{ border-right:0; }
   .view-toggle button[aria-pressed="true"]{ background:var(--ink); color:var(--paper); }
-  .result-count{ font-size:12.5px; color:var(--ink-soft); white-space:nowrap; margin-left:auto; padding-left:8px; }
+  .result-count{ font-size:12.5px; color:var(--ink-soft); white-space:nowrap; }
+  .spacer{ flex:1 1 auto; }
 
-  main{ max-width:1180px; margin:0 auto; padding:24px 24px 40px; }
+  main{ max-width:1240px; margin:0 auto; padding:22px 24px 40px; }
   .view-panel[hidden]{ display:none; }
+  .lede{ font-size:13.5px; color:var(--ink-soft); max-width:780px; margin:0 0 16px; line-height:1.55; }
 
-  .stats-strip{
-    display:flex; gap:22px; flex-wrap:wrap; padding:14px 0 20px; font-size:12.5px; color:var(--ink-soft);
-  }
-  .stats-strip b{ font-family:var(--mono); color:var(--ink); font-size:13.5px; font-weight:600; }
+  .search-wrap{ position:relative; flex:1 1 220px; min-width:180px; }
+  .search-wrap svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:0.55; }
+  input[type="search"], input[type="text"]{ width:100%; padding:9px 12px 9px 34px; border-radius:8px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink); font-size:13.5px; }
+  select{ padding:9px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink); font-size:13.5px; }
+  .toolbar{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
 
-  .lede{ font-size:13.5px; color:var(--ink-soft); max-width:760px; margin:0 0 18px; line-height:1.55; }
-
-  /* ---------- Theme bars ---------- */
-  .theme-card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px; }
-  .bucket-bar-row{
-    display:flex; align-items:center; gap:10px; cursor:pointer; padding:8px 10px; border-radius:8px;
-    border:1px solid transparent; margin-bottom:2px;
-  }
-  .bucket-bar-row:hover{ background:var(--paper-sunken); }
-  .bucket-bar-row.selected{ border-color:var(--bucket-color, var(--brass)); background:var(--paper-sunken); }
-  .bucket-bar-row .swatch{ width:9px; height:9px; border-radius:2px; background:var(--bucket-color, var(--brass)); flex:none; }
-  .bucket-bar-row .label{ flex:0 0 auto; font-size:13px; color:var(--ink); width:230px; }
-  .bucket-bar-row .track{ flex:1 1 auto; height:8px; background:var(--paper-sunken); border-radius:4px; overflow:hidden; }
-  .bucket-bar-row .fill{ height:100%; background:var(--bucket-color, var(--brass)); border-radius:4px; }
-  .bucket-bar-row .count{ flex:0 0 auto; font-size:12.5px; color:var(--ink-soft); width:34px; text-align:right; }
-
-  /* ---------- Table view (shared: module list + all-courses) ---------- */
-  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised); box-shadow:var(--shadow); }
-  table{ border-collapse:collapse; width:100%; min-width:700px; font-size:13.5px; }
-  thead th{
-    text-align:left; padding:11px 14px; background:var(--paper-sunken); font-size:11px;
-    font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); white-space:nowrap;
-    border-bottom:1px solid var(--line); position:sticky; top:0;
-  }
-  tbody td{ padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
-  tbody tr:last-child td{ border-bottom:0; }
-  tbody tr:hover{ background:var(--paper-sunken); }
-  td.mod-cell .c{ font-weight:600; color:var(--ink); }
-  td.course-cell{ max-width:280px; }
-  td.course-cell .c{ font-weight:600; }
-  td.course-cell .u{ font-size:11.5px; color:var(--ink-soft); }
   .pill{ font-size:11px; font-weight:600; padding:3px 8px; border-radius:100px; background:var(--paper-sunken); color:var(--ink-soft); display:inline-block; margin:1px 3px 1px 0; }
   .badge-yes{ color:var(--good); font-weight:700; font-size:12px; }
   .badge-no{ color:var(--ink-soft); font-size:12px; }
-  .add-btn{
-    font-size:11.5px; padding:4px 10px; border-radius:100px; border:1px solid var(--line);
-    background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; font-weight:600;
-  }
+  .add-btn{ font-size:11.5px; padding:4px 10px; border-radius:100px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; font-weight:600; }
   .add-btn:hover{ border-color:var(--brass); color:var(--brass-strong); }
   .add-btn.added{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-
+  .star-btn{ border:0; background:transparent; cursor:pointer; font-size:16px; line-height:1; color:var(--brass); padding:2px; flex:none; }
+  .star-btn.off{ color:var(--line); }
   .empty-state{ text-align:center; padding:50px 20px; color:var(--ink-soft); }
   .empty-state h3{ font-size:19px; margin-bottom:6px; }
 
+  /* ---------- Theme filter sidebar (shared: Browse by Theme + Modules) ---------- */
+  .theme-layout{ display:grid; grid-template-columns:260px 1fr; gap:20px; align-items:start; }
+  .theme-sidebar{ background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; position:sticky; top:74px; }
+  .theme-sidebar-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .theme-sidebar-head span{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); }
+  .theme-sidebar-head button{ border:0; background:transparent; color:var(--sea); font-size:11.5px; font-weight:600; cursor:pointer; }
+  .theme-check-row{ display:flex; align-items:center; gap:8px; padding:6px 6px; border-radius:6px; cursor:pointer; }
+  .theme-check-row:hover{ background:var(--paper-sunken); }
+  .theme-check-row .swatch{ width:9px; height:9px; border-radius:2px; flex:none; }
+  .theme-check-row .lbl{ flex:1 1 auto; font-size:12.5px; }
+  .theme-check-row .n{ font-size:11px; color:var(--ink-soft); font-family:var(--mono); }
+  .theme-check-row input{ flex:none; }
+  @media (max-width:880px){ .theme-layout{ grid-template-columns:1fr; } .theme-sidebar{ position:static; } }
+
+  .match-note{ font-size:13px; color:var(--ink-soft); margin-bottom:14px; }
+  .course-result{ background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden; }
+  .course-result .cr-head{ display:flex; align-items:flex-start; gap:12px; padding:14px 16px; }
+  .course-result .inst-name{ font-family:var(--sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--sea); margin-bottom:3px; }
+  .course-result h3{ font-size:15.5px; font-weight:600; }
+  .match-badge{ flex:none; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:100px; background:var(--good-soft); color:var(--good); white-space:nowrap; }
+  .cr-actions{ margin-left:auto; display:flex; align-items:center; gap:10px; flex:none; }
+  .cr-actions a{ font-size:12px; white-space:nowrap; }
+  .cr-modules{ border-top:1px solid var(--line); padding:4px 16px 12px; }
+  .cr-year{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--brass-strong); margin:10px 0 4px; }
+  .cr-mod{ display:flex; align-items:baseline; gap:8px; padding:4px 0; border-bottom:1px dashed var(--line); font-size:13px; }
+  .cr-mod .credits{ margin-left:auto; color:var(--ink-soft); font-size:11.5px; flex:none; }
+
+  /* ---------- Table (shared: Modules, All Courses course rows) ---------- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised); box-shadow:var(--shadow); }
+  table{ border-collapse:collapse; width:100%; min-width:700px; font-size:13.5px; }
+  thead th{ text-align:left; padding:11px 14px; background:var(--paper-sunken); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); white-space:nowrap; border-bottom:1px solid var(--line); position:sticky; top:0; }
+  tbody td{ padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:0; }
+  tbody tr:hover{ background:var(--paper-sunken); }
+  td .c{ font-weight:600; color:var(--ink); }
+  td .u{ font-size:11.5px; color:var(--ink-soft); }
+
+  /* ---------- All Courses: institution accordion ---------- */
+  .inst-group{ border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:10px; overflow:hidden; }
+  .inst-head, .course-row-head, .theme-check-row, .bucket-bar-row, .zone{ user-select:none; -webkit-user-select:none; }
+  .inst-head{ display:flex; align-items:center; gap:10px; padding:13px 16px; cursor:pointer; }
+  .inst-head:hover{ background:var(--paper-sunken); }
+  .inst-head .caret{ font-size:11px; color:var(--ink-soft); transition:transform .12s ease; flex:none; width:10px; }
+  .inst-group.open .inst-head .caret{ transform:rotate(90deg); }
+  .inst-head h3{ font-size:15px; font-weight:600; flex:1 1 auto; }
+  .inst-head .meta{ font-size:12px; color:var(--ink-soft); flex:none; }
+  .inst-courses{ border-top:1px solid var(--line); display:none; }
+  .inst-group.open .inst-courses{ display:block; }
+  .course-row{ border-bottom:1px solid var(--line); }
+  .course-row:last-child{ border-bottom:0; }
+  .course-row-head{ display:flex; align-items:center; gap:10px; padding:11px 16px 11px 34px; cursor:pointer; }
+  .course-row-head:hover{ background:var(--paper-sunken); }
+  .course-row-head .caret{ font-size:10px; color:var(--ink-soft); width:10px; flex:none; transition:transform .12s ease; }
+  .course-row-head.no-expand{ cursor:default; }
+  .course-row-head.no-expand:hover{ background:transparent; }
+  .course-row.open .course-row-head .caret{ transform:rotate(90deg); }
+  .course-row-head .cname{ flex:1 1 auto; font-size:13.5px; font-weight:500; }
+  .course-row-modules{ display:none; padding:2px 16px 14px 46px; }
+  .course-row.open .course-row-modules{ display:block; }
+
   /* ---------- Compare ---------- */
+  .picker-panel{ background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; margin-bottom:20px; }
   .picker-count{ font-size:12.5px; color:var(--ink-soft); margin:10px 2px 0; }
   .picker-list{ max-height:280px; overflow-y:auto; border:1px solid var(--line); border-radius:8px; margin-top:8px; background:var(--paper-raised); }
   .picker-row{ display:flex; align-items:center; gap:10px; padding:8px 12px; font-size:13.5px; border-bottom:1px solid var(--line); cursor:pointer; }
@@ -149,19 +168,13 @@
   .picker-row .pi-badge{ font-size:11px; color:var(--ink-soft); }
   .picker-row.disabled{ opacity:0.4; cursor:not-allowed; }
 
-  .compare-grid{ display:flex; gap:16px; overflow-x:auto; padding:22px 2px 8px; }
-  .compare-col{
-    flex:0 0 290px; background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column;
-  }
+  .compare-grid{ display:flex; gap:16px; overflow-x:auto; padding:6px 2px 8px; }
+  .compare-col{ flex:0 0 290px; background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; }
   .compare-col .card-top{ display:flex; gap:12px; padding:16px 16px 12px; border-left:4px solid var(--slot-color, var(--brass)); }
-  .compare-col .rank-badge{
-    flex:none; width:34px; height:34px; border-radius:8px; background:var(--paper-sunken);
-    display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:600; font-size:13px; color:var(--ink-soft);
-  }
+  .compare-col .rank-badge{ flex:none; width:34px; height:34px; border-radius:8px; background:var(--paper-sunken); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:600; font-size:13px; color:var(--ink-soft); }
   .compare-col .inst-name{ font-family:var(--sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--sea); margin-bottom:3px; }
   .compare-col h3{ font-size:15.5px; font-weight:600; line-height:1.3; }
-  .compare-col .cc-link{ padding:0 16px 12px; font-size:12px; }
+  .compare-col .cc-link{ padding:0 16px 12px; font-size:12px; display:flex; justify-content:space-between; align-items:center; }
   .compare-col .cc-body{ padding:0 16px 16px; border-top:1px solid var(--line); flex:1 1 auto; max-height:520px; overflow-y:auto; }
   .compare-col .no-data{ color:var(--ink-soft); font-size:13px; padding:14px 0; line-height:1.5; }
   .compare-col .bucket-mini{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-soft); margin:8px 0 0; }
@@ -170,22 +183,35 @@
   .compare-col .bucket-mini .fill{ height:100%; }
   .compare-col .bucket-mini .lbl{ width:140px; flex:0 0 auto; }
   .compare-col .bucket-mini .n{ width:16px; flex:0 0 auto; text-align:right; font-family:var(--mono); }
-  .compare-col h4{
-    font-family:var(--sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;
-    color:var(--brass-strong); margin:16px 0 6px;
-  }
+  .compare-col h4{ font-family:var(--sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--brass-strong); margin:16px 0 6px; }
   .compare-col h4:first-of-type{ margin-top:16px; }
   .compare-col .mod-item{ font-size:13px; padding:5px 0; border-bottom:1px dashed var(--line); color:var(--ink); }
   .compare-col .mod-item .credits{ color:var(--ink-soft); font-size:11.5px; }
   .compare-empty{ color:var(--ink-soft); font-size:14px; padding:40px 0; text-align:center; }
 
-  .toolbar{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
-  footer{
-    border-top:1px solid var(--line); padding:28px 24px 40px; margin-top:20px;
-    max-width:1180px; margin-left:auto; margin-right:auto; font-size:12.5px; color:var(--ink-soft); line-height:1.6;
+  /* ---------- Map view ---------- */
+  .map-caption{ font-size:12.5px; color:var(--ink-soft); margin-bottom:14px; max-width:640px; }
+  .active-filter-chip{ display:inline-flex; align-items:center; gap:6px; background:var(--sea-soft); color:var(--sea); font-size:12.5px; font-weight:600; padding:5px 6px 5px 12px; border-radius:100px; margin-bottom:14px; }
+  .active-filter-chip button{ border:0; background:transparent; color:var(--sea); cursor:pointer; font-size:14px; padding:2px 6px; }
+  .map-grid{ display:grid; gap:8px; grid-template-columns:repeat(4, 1fr);
+    grid-template-areas: ".    scot scot .   " "ni   scot scot .   " "ni   nw   ne   .   " ".    nw   yh   ee  " "wal  wmid emid ee  " "wal  swe  emid ldn " ".    swe  se   ldn "; }
+  .zone{ border:1px solid var(--line); border-radius:8px; background:var(--paper-raised); padding:10px 12px; min-height:64px; display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease; }
+  .zone:hover{ box-shadow:var(--shadow); transform:translateY(-1px); }
+  .zone-empty{ opacity:0.35; cursor:default; }
+  .zone-empty:hover{ box-shadow:none; transform:none; }
+  .zone .zname{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); }
+  .zone .zcount{ font-family:var(--serif); font-size:20px; font-weight:600; color:var(--ink); }
+  .zone .zlist{ font-size:11px; color:var(--sea); line-height:1.4; }
+  .z-scot{ grid-area:scot; } .z-ni{ grid-area:ni; } .z-nw{ grid-area:nw; } .z-ne{ grid-area:ne; }
+  .z-yh{ grid-area:yh; } .z-wal{ grid-area:wal; } .z-wmid{ grid-area:wmid; } .z-emid{ grid-area:emid; }
+  .z-ee{ grid-area:ee; } .z-swe{ grid-area:swe; } .z-se{ grid-area:se; } .z-ldn{ grid-area:ldn; background:var(--sea-soft); }
+  @media (max-width:640px){
+    .map-grid{ grid-template-columns:repeat(2,1fr); grid-template-areas: "scot scot" "ni   ne  " "nw   yh  " "wal  ee  " "wmid emid" "swe  ldn " "se   ldn "; }
+    .masthead-meta{ text-align:left; max-width:none; }
   }
+
+  footer{ border-top:1px solid var(--line); padding:28px 24px 40px; margin-top:20px; max-width:1240px; margin-left:auto; margin-right:auto; font-size:12.5px; color:var(--ink-soft); line-height:1.6; }
   footer a{ color:var(--sea); }
-  @media (max-width:640px){ .masthead-meta{ text-align:left; max-width:none; } }
   @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
 </style>
 
@@ -203,7 +229,13 @@
         <h1>UK IR &amp; Politics Course Explorer</h1>
       </div>
     </div>
-    <p class="masthead-meta" id="masthead-meta"></p>
+    <div style="display:flex; align-items:flex-end; gap:16px;">
+      <p class="masthead-meta" id="masthead-meta"></p>
+      <div style="position:relative;">
+        <button class="bookmark-btn" id="bookmark-toggle">★ <span class="n" id="bookmark-count">0</span></button>
+        <div class="bookmark-panel" id="bookmark-panel" hidden></div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -211,8 +243,10 @@
   <div class="controls-inner">
     <div class="view-toggle" role="group" aria-label="Section">
       <button data-tab="theme" aria-pressed="true">Browse by Theme</button>
+      <button data-tab="modules" aria-pressed="false">Modules</button>
       <button data-tab="compare" aria-pressed="false">Compare Courses</button>
       <button data-tab="all" aria-pressed="false">All Courses</button>
+      <button data-tab="map" aria-pressed="false">Map</button>
     </div>
     <span class="result-count" id="header-count"></span>
   </div>
@@ -220,57 +254,89 @@
 
 <main>
 
-  <!-- THEME PANEL -->
+  <!-- BROWSE BY THEME -->
   <section class="view-panel" id="panel-theme">
-    <p class="lede">Click a theme below to see which modules and courses cover it. Only courses whose module pages we've successfully catalogued appear here — everything else shows up under "All Courses" with a link straight to the department's page.</p>
-    <div class="theme-card"><div id="bucket-bars"></div></div>
-    <div id="module-list-wrap" style="margin-top:20px; display:none;">
-      <div class="toolbar">
-        <strong id="module-list-title"></strong>
-        <div class="search-wrap" style="max-width:280px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <input type="search" id="module-search" placeholder="Filter by module or institution…">
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Module</th><th>Course</th><th>Year</th><th>Credits</th></tr></thead>
-          <tbody id="module-list-rows"></tbody>
-        </table>
+    <p class="lede">Tick one or more themes to see which courses cover them. Results are courses, with the matching modules listed underneath each one — only courses whose module pages we've catalogued can appear here.</p>
+    <div class="theme-layout">
+      <aside class="theme-sidebar">
+        <div class="theme-sidebar-head"><span>Themes</span><button type="button" id="theme-clear">Clear</button></div>
+        <div id="theme-checklist"></div>
+      </aside>
+      <div>
+        <div class="match-note" id="theme-match-note"></div>
+        <div id="theme-results"></div>
       </div>
     </div>
   </section>
 
-  <!-- COMPARE PANEL -->
+  <!-- MODULES -->
+  <section class="view-panel" id="panel-modules" hidden>
+    <p class="lede">Every catalogued module, in one list. Filter by theme on the left, or search by name and institution.</p>
+    <div class="theme-layout">
+      <aside class="theme-sidebar">
+        <div class="theme-sidebar-head"><span>Themes</span><button type="button" id="mod-theme-clear">Clear</button></div>
+        <div id="mod-theme-checklist"></div>
+      </aside>
+      <div>
+        <div class="toolbar">
+          <div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" id="mod-search" placeholder="Filter by module or institution…"></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Module</th><th>Theme(s)</th><th>Offered by</th></tr></thead>
+            <tbody id="mod-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARE -->
   <section class="view-panel" id="panel-compare" hidden>
     <p class="lede">Pick up to five courses to see their modules side by side, grouped by theme and by year.</p>
-    <div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input type="search" id="compare-search" placeholder="Search institutions or courses…"></div>
-    <div class="picker-count" id="picker-count">0 of 5 courses selected</div>
-    <div class="picker-list" id="picker-list"></div>
+    <div class="picker-panel">
+      <div class="toolbar" style="margin-bottom:0;">
+        <div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="search" id="compare-search" placeholder="Search institutions or courses…"></div>
+        <select id="compare-inst-filter"><option value="">All institutions</option></select>
+        <select id="compare-mod-filter">
+          <option value="">All courses</option>
+          <option value="yes">Modules catalogued</option>
+          <option value="no">Link only</option>
+        </select>
+        <select id="compare-theme-filter"><option value="">Any theme</option></select>
+      </div>
+      <div class="picker-count" id="picker-count">0 of 5 courses selected</div>
+      <div class="picker-list" id="picker-list"></div>
+    </div>
     <div class="compare-grid" id="compare-grid"></div>
   </section>
 
-  <!-- ALL COURSES PANEL -->
+  <!-- ALL COURSES -->
   <section class="view-panel" id="panel-all" hidden>
     <div class="toolbar">
       <div class="search-wrap" style="max-width:280px;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <input type="search" id="all-search" placeholder="Search institutions or courses…">
       </div>
-      <select id="all-institution-filter"><option value="">All institutions</option></select>
       <select id="all-modules-filter">
         <option value="">All courses</option>
         <option value="yes">Modules catalogued</option>
-        <option value="no">Link only (no module data yet)</option>
+        <option value="no">Link only</option>
       </select>
+      <span class="spacer"></span>
+      <button class="add-btn" id="all-expand-all">Expand all</button>
+      <button class="add-btn" id="all-collapse-all">Collapse all</button>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Institution</th><th>Course</th><th>Modules</th><th>Compare</th><th>Link</th></tr></thead>
-        <tbody id="all-course-rows"></tbody>
-      </table>
-    </div>
+    <div id="active-region-chip"></div>
+    <div id="inst-groups"></div>
+  </section>
+
+  <!-- MAP -->
+  <section class="view-panel" id="panel-map" hidden>
+    <p class="map-caption">A schematic layout of UK regions (not a literal map) — click a region to jump to "All Courses" filtered to it.</p>
+    <div class="map-grid" id="map-grid"></div>
   </section>
 
 </main>
@@ -279,8 +345,8 @@
   <strong>About this data.</strong> 267 UK undergraduate International Relations / Politics courses are tracked;
   module lists are pulled directly from each university's own course page and sorted into the sixteen themes above.
   Coverage is a work in progress — a course without a catalogued module list links straight to its official page
-  instead. Module pages are not always kept current by universities, so always confirm the live syllabus before
-  applying.
+  instead. Bookmarks are kept for this browsing session only and reset on reload. Module pages are not always kept
+  current by universities, so always confirm the live syllabus before applying.
 </footer>
 
 <div id="dataStore" hidden>__DATA_JSON__</div>
@@ -293,31 +359,80 @@
   var COURSES = DATA.courses;
 
   var BUCKET_COLOR = {
-    "Security & Conflict": "#9A3B2E",
-    "IR Theory & Global Order": "#5B7FBF",
-    "International Political Economy": "#3EAA8F",
-    "Comparative & British Politics": "#9C7229",
-    "Political Theory & Philosophy": "#7A5CC9",
-    "Human Rights & Humanitarianism": "#2F6058",
-    "Regional & Area Studies": "#C99A3E",
-    "Diplomacy & Foreign Policy": "#6E7FE0",
-    "Law": "#4C9EC9",
-    "Gender, Identity & Society": "#B85C9E",
-    "Environment & Sustainability": "#2E6B4F",
-    "Media, Communication & Culture": "#C9683E",
-    "Research Methods & Dissertation": "#8E9E3E",
-    "Language & Area Language Modules": "#3C9E7A",
-    "Skills, Placement & Employability": "#7E5B1F",
-    "Sociology & History": "#6E5A8E"
+    "Security & Conflict": "#9A3B2E", "IR Theory & Global Order": "#5B7FBF", "International Political Economy": "#3EAA8F",
+    "Comparative & British Politics": "#9C7229", "Political Theory & Philosophy": "#7A5CC9", "Human Rights & Humanitarianism": "#2F6058",
+    "Regional & Area Studies": "#C99A3E", "Diplomacy & Foreign Policy": "#6E7FE0", "Law": "#4C9EC9",
+    "Gender, Identity & Society": "#B85C9E", "Environment & Sustainability": "#2E6B4F", "Media, Communication & Culture": "#C9683E",
+    "Research Methods & Dissertation": "#8E9E3E", "Language & Area Language Modules": "#3C9E7A",
+    "Skills, Placement & Employability": "#7E5B1F", "Sociology & History": "#6E5A8E"
   };
   var SLOT_COLORS = ["#5B7FBF", "#9A3B2E", "#3EAA8F", "#C99A3E", "#B85C9E"];
+  var REGION_COLOR = {
+    "Scotland":"#5B7FBF","Northern Ireland":"#3C9E7A","Wales":"#B85C9E","North West England":"#4C9EC9",
+    "North East England":"#6E7FE0","Yorkshire and the Humber":"#C99A3E","West Midlands":"#C9683E",
+    "East Midlands":"#3EAA8F","East of England":"#8E9E3E","London":"#9C7229","South East England":"#7A5CC9",
+    "South West England":"#3E9E5C"
+  };
+  var ZONE_KEY = {
+    "Scotland":"scot","Northern Ireland":"ni","North West England":"nw","North East England":"ne",
+    "Yorkshire and the Humber":"yh","Wales":"wal","West Midlands":"wmid","East Midlands":"emid",
+    "East of England":"ee","South West England":"swe","South East England":"se","London":"ldn"
+  };
 
-  function esc(s) {
+  function escapeHtml(s) {
     if (s === null || s === undefined) return "";
     return String(s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
     });
   }
+
+  function courseById(id) { return COURSES.filter(function (c) { return c.id === id; })[0]; }
+
+  // ============================================================
+  // BOOKMARKS
+  // ============================================================
+  var bookmarked = new Set();
+
+  function starHTML(id) {
+    var on = bookmarked.has(id);
+    return '<button type="button" class="star-btn' + (on ? "" : " off") + '" data-star="' + id + '" title="' +
+      (on ? "Remove bookmark" : "Bookmark this course") + '">' + (on ? "★" : "☆") + '</button>';
+  }
+
+  function toggleBookmark(id) {
+    if (bookmarked.has(id)) bookmarked.delete(id); else bookmarked.add(id);
+    renderBookmarkPanel();
+    renderActiveTab();
+  }
+
+  function renderBookmarkPanel() {
+    document.getElementById("bookmark-count").textContent = bookmarked.size;
+    var panel = document.getElementById("bookmark-panel");
+    if (!bookmarked.size) {
+      panel.innerHTML = '<div class="bookmark-empty">No bookmarks yet — click the ☆ next to any course.</div>';
+      return;
+    }
+    var html = "";
+    Array.from(bookmarked).forEach(function (id) {
+      var c = courseById(id);
+      if (!c) return;
+      html += '<div class="bookmark-row">' +
+        '<div class="bi"><span class="c">' + escapeHtml(c.institution) + '</span><span class="u">' + escapeHtml(c.course_name) + '</span></div>' +
+        '<a href="' + escapeHtml(c.url) + '" target="_blank" rel="noopener" style="align-self:center; font-size:11.5px;">Open ↗</a>' +
+        '<button type="button" class="unstar" data-star="' + id + '" title="Remove">✕</button>' +
+        '</div>';
+    });
+    panel.innerHTML = html;
+  }
+
+  document.addEventListener("click", function (e) {
+    var starBtn = e.target.closest("[data-star]");
+    if (starBtn) { toggleBookmark(starBtn.dataset.star); return; }
+    var toggleBtn = e.target.closest("#bookmark-toggle");
+    var panel = document.getElementById("bookmark-panel");
+    if (toggleBtn) { panel.hidden = !panel.hidden; return; }
+    if (!e.target.closest("#bookmark-panel")) { panel.hidden = true; }
+  });
 
   // ---------- masthead ----------
   document.getElementById("masthead-meta").innerHTML =
@@ -325,101 +440,185 @@
     "compared by the modules they teach &mdash; " + DATA.stats.courses_with_modules + " of " + DATA.stats.total_courses +
     " target courses catalogued so far.";
   document.getElementById("header-count").textContent = COURSES.length + " courses";
+  renderBookmarkPanel();
 
   // ---------- tabs ----------
+  var TAB_IDS = ["theme", "modules", "compare", "all", "map"];
+  var currentTab = "theme";
   var tabButtons = document.querySelectorAll(".view-toggle button[data-tab]");
   tabButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      tabButtons.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
-      btn.setAttribute("aria-pressed", "true");
-      ["theme", "compare", "all"].forEach(function (t) {
-        document.getElementById("panel-" + t).hidden = (t !== btn.dataset.tab);
-      });
-    });
+    btn.addEventListener("click", function () { setTab(btn.dataset.tab); });
   });
+  function setTab(tab) {
+    currentTab = tab;
+    tabButtons.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.tab === tab ? "true" : "false"); });
+    TAB_IDS.forEach(function (t) { document.getElementById("panel-" + t).hidden = (t !== tab); });
+    renderActiveTab();
+  }
+  function renderActiveTab() {
+    if (currentTab === "theme") renderThemeResults();
+    else if (currentTab === "modules") renderModuleRows();
+    else if (currentTab === "compare") { renderPicker(); renderCompareGrid(); }
+    else if (currentTab === "all") renderInstGroups();
+    else if (currentTab === "map") renderMap();
+  }
 
   // ============================================================
-  // THEME BROWSE
+  // Shared: theme checklist builder
   // ============================================================
   function bucketCounts() {
     var counts = {};
     BUCKETS.forEach(function (b) { counts[b] = 0; });
     COURSES.forEach(function (c) {
       Object.keys(c.years).forEach(function (y) {
-        c.years[y].forEach(function (m) {
-          m.buckets.forEach(function (b) { counts[b] = (counts[b] || 0) + 1; });
-        });
+        c.years[y].forEach(function (m) { m.buckets.forEach(function (b) { counts[b] = (counts[b] || 0) + 1; }); });
       });
     });
     return counts;
   }
   var BUCKET_COUNTS = bucketCounts();
-  var maxBucketCount = Math.max.apply(null, Object.keys(BUCKET_COUNTS).map(function (k) { return BUCKET_COUNTS[k]; }));
-  var selectedBucket = null;
+  var BUCKETS_SORTED = BUCKETS.slice().sort(function (a, b) { return BUCKET_COUNTS[b] - BUCKET_COUNTS[a]; });
 
-  function renderBucketBars() {
-    var wrap = document.getElementById("bucket-bars");
-    wrap.innerHTML = "";
-    var sorted = BUCKETS.slice().sort(function (a, b) { return BUCKET_COUNTS[b] - BUCKET_COUNTS[a]; });
-    sorted.forEach(function (b) {
-      var row = document.createElement("div");
-      row.className = "bucket-bar-row" + (selectedBucket === b ? " selected" : "");
-      row.style.setProperty("--bucket-color", BUCKET_COLOR[b] || "var(--brass)");
-      var pct = maxBucketCount ? Math.round((BUCKET_COUNTS[b] / maxBucketCount) * 100) : 0;
-      row.innerHTML =
-        '<span class="swatch"></span>' +
-        '<span class="label">' + esc(b) + '</span>' +
-        '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
-        '<span class="count tabular">' + BUCKET_COUNTS[b] + '</span>';
-      row.addEventListener("click", function () {
-        selectedBucket = (selectedBucket === b) ? null : b;
-        renderBucketBars();
-        renderModuleList();
+  function renderThemeChecklist(containerId, selectedSet, onChange) {
+    var wrap = document.getElementById(containerId);
+    wrap.innerHTML = BUCKETS_SORTED.map(function (b) {
+      var checked = selectedSet.has(b);
+      return '<label class="theme-check-row" data-theme="' + escapeHtml(b) + '">' +
+        '<input type="checkbox" ' + (checked ? "checked" : "") + '>' +
+        '<span class="swatch" style="background:' + (BUCKET_COLOR[b] || "#999") + '"></span>' +
+        '<span class="lbl">' + escapeHtml(b) + '</span>' +
+        '<span class="n">' + BUCKET_COUNTS[b] + '</span>' +
+        '</label>';
+    }).join("");
+    wrap.querySelectorAll(".theme-check-row").forEach(function (row) {
+      row.querySelector("input").addEventListener("change", function (e) {
+        var b = row.dataset.theme;
+        if (e.target.checked) selectedSet.add(b); else selectedSet.delete(b);
+        onChange();
       });
-      wrap.appendChild(row);
     });
   }
 
-  function renderModuleList() {
-    var wrap = document.getElementById("module-list-wrap");
-    var titleEl = document.getElementById("module-list-title");
-    var rowsEl = document.getElementById("module-list-rows");
-    if (!selectedBucket) { wrap.style.display = "none"; return; }
-    wrap.style.display = "block";
-    titleEl.textContent = selectedBucket + " — " + BUCKET_COUNTS[selectedBucket] + " modules";
+  // ============================================================
+  // BROWSE BY THEME
+  // ============================================================
+  var themeSelected = new Set();
 
-    var q = (document.getElementById("module-search").value || "").toLowerCase();
-    var rows = [];
-    COURSES.forEach(function (c) {
-      Object.keys(c.years).forEach(function (y) {
-        c.years[y].forEach(function (m) {
-          if (m.buckets.indexOf(selectedBucket) === -1) return;
-          var hay = (m.name + " " + c.institution + " " + c.course_name).toLowerCase();
-          if (q && hay.indexOf(q) === -1) return;
-          rows.push({ mod: m, course: c, year: y });
-        });
-      });
-    });
-    rows.sort(function (a, b) {
-      return a.course.institution.localeCompare(b.course.institution) || a.mod.name.localeCompare(b.mod.name);
-    });
+  function renderThemeSidebar() { renderThemeChecklist("theme-checklist", themeSelected, function () { renderThemeSidebar(); renderThemeResults(); }); }
+  document.getElementById("theme-clear").addEventListener("click", function () { themeSelected.clear(); renderThemeSidebar(); renderThemeResults(); });
 
-    if (!rows.length) {
-      rowsEl.innerHTML = '<tr><td colspan="4"><div class="empty-state"><h3>No modules match</h3><p>Try a different search term.</p></div></td></tr>';
+  function renderThemeResults() {
+    var note = document.getElementById("theme-match-note");
+    var out = document.getElementById("theme-results");
+    if (!themeSelected.size) {
+      note.textContent = "";
+      out.innerHTML = '<div class="empty-state"><h3>Pick a theme to start</h3><p>Tick one or more themes on the left to see which courses cover them.</p></div>';
       return;
     }
-    rowsEl.innerHTML = rows.map(function (r) {
-      return '<tr>' +
-        '<td class="mod-cell"><div class="c">' + esc(r.mod.name) + '</div></td>' +
-        '<td class="course-cell"><a href="' + esc(r.course.url) + '" target="_blank" rel="noopener"><div class="c">' + esc(r.course.institution) + '</div></a><div class="u">' + esc(r.course.course_name) + '</div></td>' +
-        '<td>' + esc(r.year) + '</td>' +
-        '<td class="tabular">' + esc(r.mod.credits || "—") + '</td>' +
-        '</tr>';
+    var selArr = Array.from(themeSelected);
+    var results = [];
+    COURSES.forEach(function (c) {
+      if (!c.has_modules) return;
+      var matched = selArr.filter(function (b) { return (c.bucket_counts[b] || 0) > 0; });
+      if (!matched.length) return;
+      results.push({ course: c, matched: matched });
+    });
+    results.sort(function (a, b) {
+      return b.matched.length - a.matched.length ||
+        a.course.institution.localeCompare(b.course.institution) ||
+        a.course.course_name.localeCompare(b.course.course_name);
+    });
+    note.textContent = results.length + (results.length === 1 ? " course matches " : " courses match ") +
+      selArr.length + (selArr.length === 1 ? " selected theme" : " selected themes") + ".";
+
+    if (!results.length) {
+      out.innerHTML = '<div class="empty-state"><h3>No courses match</h3><p>Try selecting fewer themes.</p></div>';
+      return;
+    }
+
+    out.innerHTML = results.map(function (r) {
+      var c = r.course, matchedSet = new Set(r.matched);
+      var modRows = [];
+      Object.keys(c.years).forEach(function (y) {
+        var mods = c.years[y].filter(function (m) { return m.buckets.some(function (b) { return matchedSet.has(b); }); });
+        if (!mods.length) return;
+        modRows.push('<div class="cr-year">' + escapeHtml(y) + '</div>');
+        mods.forEach(function (m) {
+          modRows.push('<div class="cr-mod"><span>' + escapeHtml(m.name) + '</span>' +
+            (m.credits ? '<span class="credits">' + escapeHtml(m.credits) + ' credits</span>' : '') + '</div>');
+        });
+      });
+      return '<article class="course-result">' +
+        '<div class="cr-head">' + starHTML(c.id) +
+        '<div><div class="inst-name">' + escapeHtml(c.institution) + '</div><h3>' + escapeHtml(c.course_name) + '</h3></div>' +
+        '<div class="cr-actions">' +
+          '<span class="match-badge">' + r.matched.length + ' of ' + selArr.length + ' themes matched</span>' +
+          '<a href="' + escapeHtml(c.url) + '" target="_blank" rel="noopener">Course page ↗</a>' +
+        '</div></div>' +
+        '<div class="cr-modules">' + modRows.join("") + '</div>' +
+        '</article>';
     }).join("");
   }
 
-  document.getElementById("module-search").addEventListener("input", renderModuleList);
-  renderBucketBars();
+  renderThemeSidebar();
+  renderThemeResults();
+
+  // ============================================================
+  // MODULES
+  // ============================================================
+  var modThemeSelected = new Set();
+
+  // Build the unique-module index once.
+  var MODULE_INDEX = (function () {
+    var map = {};
+    COURSES.forEach(function (c) {
+      Object.keys(c.years).forEach(function (y) {
+        c.years[y].forEach(function (m) {
+          if (!map[m.name]) map[m.name] = { name: m.name, buckets: new Set(), offers: [] };
+          m.buckets.forEach(function (b) { map[m.name].buckets.add(b); });
+          map[m.name].offers.push({ course: c, year: y });
+        });
+      });
+    });
+    return Object.keys(map).map(function (k) { return map[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+  })();
+
+  function renderModTheme() { renderThemeChecklist("mod-theme-checklist", modThemeSelected, function () { renderModTheme(); renderModuleRows(); }); }
+  document.getElementById("mod-theme-clear").addEventListener("click", function () { modThemeSelected.clear(); renderModTheme(); renderModuleRows(); });
+  document.getElementById("mod-search").addEventListener("input", renderModuleRows);
+
+  function renderModuleRows() {
+    var q = (document.getElementById("mod-search").value || "").toLowerCase();
+    var selArr = Array.from(modThemeSelected);
+    var rows = MODULE_INDEX.filter(function (entry) {
+      if (selArr.length && !selArr.some(function (b) { return entry.buckets.has(b); })) return false;
+      if (q) {
+        var hay = entry.name.toLowerCase() + " " + entry.offers.map(function (o) { return o.course.institution; }).join(" ").toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    var tbody = document.getElementById("mod-rows");
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="3"><div class="empty-state"><h3>No modules match</h3></div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(function (entry) {
+      var themeTags = Array.from(entry.buckets).map(function (b) {
+        return '<span class="pill" style="background:' + (BUCKET_COLOR[b] || "#ccc") + "22" + '">' + escapeHtml(b) + '</span>';
+      }).join("");
+      var offers = entry.offers.map(function (o) {
+        return '<div><a href="' + escapeHtml(o.course.url) + '" target="_blank" rel="noopener">' + escapeHtml(o.course.institution) + '</a> ' +
+          '<span class="u">' + escapeHtml(o.course.course_name) + ' — ' + escapeHtml(o.year) + '</span></div>';
+      }).join("");
+      return '<tr><td><div class="c">' + escapeHtml(entry.name) + '</div></td>' +
+        '<td>' + themeTags + '</td>' +
+        '<td>' + offers + '</td></tr>';
+    }).join("");
+  }
+
+  renderModTheme();
+  renderModuleRows();
 
   // ============================================================
   // COMPARE
@@ -427,21 +626,37 @@
   var MAX_COMPARE = 5;
   var selectedIds = [];
 
-  function courseById(id) { return COURSES.filter(function (c) { return c.id === id; })[0]; }
+  (function populateCompareFilters() {
+    var instSel = document.getElementById("compare-inst-filter");
+    DATA.institutions.forEach(function (inst) {
+      var opt = document.createElement("option"); opt.value = inst; opt.textContent = inst; instSel.appendChild(opt);
+    });
+    var themeSel = document.getElementById("compare-theme-filter");
+    BUCKETS_SORTED.forEach(function (b) {
+      var opt = document.createElement("option"); opt.value = b; opt.textContent = b; themeSel.appendChild(opt);
+    });
+  })();
 
   function renderPicker() {
     var list = document.getElementById("picker-list");
     var q = (document.getElementById("compare-search").value || "").toLowerCase();
+    var instFilter = document.getElementById("compare-inst-filter").value;
+    var modFilter = document.getElementById("compare-mod-filter").value;
+    var themeFilter = document.getElementById("compare-theme-filter").value;
     var atMax = selectedIds.length >= MAX_COMPARE;
     var html = "";
     COURSES.forEach(function (c) {
+      if (instFilter && c.institution !== instFilter) return;
+      if (modFilter === "yes" && !c.has_modules) return;
+      if (modFilter === "no" && c.has_modules) return;
+      if (themeFilter && (c.bucket_counts[themeFilter] || 0) === 0) return;
       var hay = (c.institution + " " + c.course_name).toLowerCase();
       if (q && hay.indexOf(q) === -1) return;
       var checked = selectedIds.indexOf(c.id) !== -1;
       var disabled = atMax && !checked;
       html += '<label class="picker-row' + (disabled ? " disabled" : "") + '" data-id="' + c.id + '">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") + (disabled ? " disabled" : "") + '>' +
-        '<span class="pi-name">' + esc(c.institution) + ' — ' + esc(c.course_name) + '</span>' +
+        '<span class="pi-name">' + escapeHtml(c.institution) + ' — ' + escapeHtml(c.course_name) + '</span>' +
         '<span class="pi-badge">' + (c.has_modules ? "✓ modules" : "link only") + '</span>' +
         '</label>';
     });
@@ -459,7 +674,7 @@
     else { if (selectedIds.length >= MAX_COMPARE) return; selectedIds.push(id); }
     renderPicker();
     renderCompareGrid();
-    renderAllCourseRows();
+    if (currentTab === "all") renderInstGroups();
   }
 
   function renderCompareGrid() {
@@ -475,9 +690,9 @@
       html += '<article class="compare-col" style="--slot-color:' + color + '">';
       html += '<div class="card-top">' +
         '<div class="rank-badge">' + (i + 1) + '</div>' +
-        '<div><div class="inst-name">' + esc(c.institution) + '</div><h3>' + esc(c.course_name) + '</h3></div>' +
+        '<div><div class="inst-name">' + escapeHtml(c.institution) + '</div><h3>' + escapeHtml(c.course_name) + '</h3></div>' +
         '</div>';
-      html += '<div class="cc-link"><a href="' + esc(c.url) + '" target="_blank" rel="noopener">Course page ↗</a></div>';
+      html += '<div class="cc-link">' + starHTML(c.id) + '<a href="' + escapeHtml(c.url) + '" target="_blank" rel="noopener">Course page ↗</a></div>';
       html += '<div class="cc-body">';
       if (!c.has_modules) {
         html += '<div class="no-data">Module details aren\'t catalogued for this course yet. Use the course page link above for the current module list.</div>';
@@ -488,16 +703,15 @@
         bucketsSorted.forEach(function (b) {
           var pct = Math.round((bc[b] / maxN) * 100);
           html += '<div class="bucket-mini"><span class="swatch" style="background:' + (BUCKET_COLOR[b] || "var(--brass)") + '"></span>' +
-            '<span class="lbl">' + esc(b) + '</span>' +
+            '<span class="lbl">' + escapeHtml(b) + '</span>' +
             '<span class="track"><span class="fill" style="width:' + pct + '%;background:' + (BUCKET_COLOR[b] || "var(--brass)") + '"></span></span>' +
             '<span class="n">' + bc[b] + '</span></div>';
         });
         Object.keys(c.years).forEach(function (y) {
-          html += '<h4>' + esc(y) + '</h4>';
+          html += '<h4>' + escapeHtml(y) + '</h4>';
           c.years[y].forEach(function (m) {
-            html += '<div class="mod-item">' + esc(m.name) +
-              (m.credits ? ' <span class="credits">(' + esc(m.credits) + ' credits)</span>' : '') +
-              '</div>';
+            html += '<div class="mod-item">' + escapeHtml(m.name) +
+              (m.credits ? ' <span class="credits">(' + escapeHtml(m.credits) + ' credits)</span>' : '') + '</div>';
           });
         });
       }
@@ -506,58 +720,151 @@
     grid.innerHTML = html;
   }
 
-  document.getElementById("compare-search").addEventListener("input", renderPicker);
+  ["compare-search", "compare-inst-filter", "compare-mod-filter", "compare-theme-filter"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", renderPicker);
+    document.getElementById(id).addEventListener("change", renderPicker);
+  });
   renderPicker();
   renderCompareGrid();
 
   // ============================================================
-  // ALL COURSES
+  // ALL COURSES (institution accordion)
   // ============================================================
-  (function populateInstitutionFilter() {
-    var sel = document.getElementById("all-institution-filter");
-    DATA.institutions.forEach(function (inst) {
-      var opt = document.createElement("option");
-      opt.value = inst; opt.textContent = inst;
-      sel.appendChild(opt);
-    });
-  })();
+  var expandedInst = new Set();
+  var expandedCourse = new Set();
+  var activeRegion = null;
 
-  function renderAllCourseRows() {
+  function renderActiveRegionChip() {
+    var el = document.getElementById("active-region-chip");
+    if (!activeRegion) { el.innerHTML = ""; return; }
+    el.innerHTML = '<span class="active-filter-chip">Region: ' + escapeHtml(activeRegion) + '<button type="button" id="clear-region">✕</button></span>';
+    document.getElementById("clear-region").addEventListener("click", function () { activeRegion = null; renderInstGroups(); });
+  }
+
+  function renderInstGroups() {
+    renderActiveRegionChip();
     var q = (document.getElementById("all-search").value || "").toLowerCase();
-    var instFilter = document.getElementById("all-institution-filter").value;
     var modFilter = document.getElementById("all-modules-filter").value;
-    var tbody = document.getElementById("all-course-rows");
-    var rows = COURSES.filter(function (c) {
-      if (instFilter && c.institution !== instFilter) return false;
-      if (modFilter === "yes" && !c.has_modules) return false;
-      if (modFilter === "no" && c.has_modules) return false;
+    var filtering = !!(q || modFilter || activeRegion);
+
+    var byInst = {};
+    COURSES.forEach(function (c) {
+      if (activeRegion && c.region !== activeRegion) return;
+      if (modFilter === "yes" && !c.has_modules) return;
+      if (modFilter === "no" && c.has_modules) return;
       if (q) {
         var hay = (c.institution + " " + c.course_name).toLowerCase();
-        if (hay.indexOf(q) === -1) return false;
+        if (hay.indexOf(q) === -1) return;
       }
-      return true;
+      (byInst[c.institution] = byInst[c.institution] || []).push(c);
     });
-    var html = "";
-    rows.forEach(function (c) {
-      var inCompare = selectedIds.indexOf(c.id) !== -1;
-      html += "<tr>" +
-        "<td>" + esc(c.institution) + "</td>" +
-        '<td class="course-cell"><div class="c">' + esc(c.course_name) + "</div></td>" +
-        "<td>" + (c.has_modules ? '<span class="badge-yes">✓ ' + c.module_count + ' modules</span>' : '<span class="badge-no">link only</span>') + "</td>" +
-        '<td><button class="add-btn' + (inCompare ? " added" : "") + '" data-id="' + c.id + '">' + (inCompare ? "Added" : "+ Compare") + '</button></td>' +
-        '<td><a href="' + esc(c.url) + '" target="_blank" rel="noopener">Course page ↗</a></td>' +
-        "</tr>";
+    var insts = Object.keys(byInst).sort();
+    var wrap = document.getElementById("inst-groups");
+    if (!insts.length) {
+      wrap.innerHTML = '<div class="empty-state"><h3>No courses match</h3><p>Try a different search term or filter.</p></div>';
+      return;
+    }
+    wrap.innerHTML = insts.map(function (inst) {
+      var courses = byInst[inst];
+      var withMods = courses.filter(function (c) { return c.has_modules; }).length;
+      var isOpen = filtering || expandedInst.has(inst);
+      var rows = courses.map(function (c) {
+        var courseOpen = expandedCourse.has(c.id);
+        var canExpand = c.has_modules;
+        var moduleHtml = "";
+        if (canExpand) {
+          Object.keys(c.years).forEach(function (y) {
+            moduleHtml += '<div class="cr-year">' + escapeHtml(y) + '</div>';
+            c.years[y].forEach(function (m) {
+              moduleHtml += '<div class="cr-mod"><span>' + escapeHtml(m.name) + '</span>' +
+                (m.credits ? '<span class="credits">' + escapeHtml(m.credits) + ' credits</span>' : '') + '</div>';
+            });
+          });
+        }
+        var inCompare = selectedIds.indexOf(c.id) !== -1;
+        return '<div class="course-row' + (courseOpen && canExpand ? " open" : "") + '" data-course="' + c.id + '">' +
+          '<div class="course-row-head' + (canExpand ? "" : " no-expand") + '" data-toggle-course="' + (canExpand ? c.id : "") + '">' +
+          '<span class="caret">' + (canExpand ? "▸" : "") + '</span>' +
+          starHTML(c.id) +
+          '<span class="cname">' + escapeHtml(c.course_name) + '</span>' +
+          (c.has_modules ? '<span class="badge-yes">✓ ' + c.module_count + ' modules</span>' : '<span class="badge-no">link only</span>') +
+          '<button type="button" class="add-btn' + (inCompare ? " added" : "") + '" data-id="' + c.id + '">' + (inCompare ? "Added" : "+ Compare") + '</button>' +
+          '<a href="' + escapeHtml(c.url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Course page ↗</a>' +
+          '</div>' +
+          (canExpand ? '<div class="course-row-modules">' + moduleHtml + '</div>' : '') +
+          '</div>';
+      }).join("");
+      return '<div class="inst-group' + (isOpen ? " open" : "") + '" data-inst="' + escapeHtml(inst) + '">' +
+        '<div class="inst-head" data-toggle-inst="' + escapeHtml(inst) + '">' +
+        '<span class="caret">▸</span><h3>' + escapeHtml(inst) + '</h3>' +
+        '<span class="meta">' + courses.length + ' course' + (courses.length === 1 ? "" : "s") + ' · ' + withMods + ' with modules</span>' +
+        '</div><div class="inst-courses">' + rows + '</div></div>';
+    }).join("");
+
+    wrap.querySelectorAll("[data-toggle-inst]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var inst = el.dataset.toggleInst;
+        if (expandedInst.has(inst)) expandedInst.delete(inst); else expandedInst.add(inst);
+        renderInstGroups();
+      });
     });
-    tbody.innerHTML = rows.length ? html : '<tr><td colspan="5"><div class="empty-state"><h3>No courses match</h3><p>Try a different search term or filter.</p></div></td></tr>';
-    tbody.querySelectorAll(".add-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () { toggleCourse(btn.dataset.id); });
+    wrap.querySelectorAll("[data-toggle-course]").forEach(function (el) {
+      el.addEventListener("click", function (e) {
+        if (e.target.closest(".add-btn") || e.target.closest("[data-star]") || e.target.closest("a")) return;
+        var id = el.dataset.toggleCourse;
+        if (!id) return;
+        if (expandedCourse.has(id)) expandedCourse.delete(id); else expandedCourse.add(id);
+        renderInstGroups();
+      });
+    });
+    wrap.querySelectorAll(".add-btn[data-id]").forEach(function (btn) {
+      btn.addEventListener("click", function (e) { e.stopPropagation(); toggleCourse(btn.dataset.id); });
     });
   }
 
-  ["all-search", "all-institution-filter", "all-modules-filter"].forEach(function (id) {
-    document.getElementById(id).addEventListener("input", renderAllCourseRows);
-    document.getElementById(id).addEventListener("change", renderAllCourseRows);
+  document.getElementById("all-expand-all").addEventListener("click", function () {
+    expandedInst = new Set(DATA.institutions); renderInstGroups();
   });
-  renderAllCourseRows();
+  document.getElementById("all-collapse-all").addEventListener("click", function () {
+    expandedInst = new Set(); expandedCourse = new Set(); renderInstGroups();
+  });
+  ["all-search", "all-modules-filter"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", renderInstGroups);
+    document.getElementById(id).addEventListener("change", renderInstGroups);
+  });
+  renderInstGroups();
+
+  // ============================================================
+  // MAP
+  // ============================================================
+  function renderMap() {
+    var grid = document.getElementById("map-grid");
+    var counts = {};
+    var seenInst = {};
+    COURSES.forEach(function (c) {
+      if (seenInst[c.institution]) return;
+      seenInst[c.institution] = true;
+      counts[c.region] = counts[c.region] || [];
+      counts[c.region].push(c.institution);
+    });
+    var order = ["Scotland","Northern Ireland","North West England","North East England","Yorkshire and the Humber",
+      "Wales","West Midlands","East Midlands","East of England","South West England","South East England","London"];
+    grid.innerHTML = order.map(function (r) {
+      var key = ZONE_KEY[r];
+      var list = (counts[r] || []).sort();
+      var cls = list.length ? "" : " zone-empty";
+      var names = list.slice(0, 4).join(", ") + (list.length > 4 ? " +" + (list.length - 4) + " more" : "");
+      return '<div class="zone z-' + key + cls + '" data-region="' + escapeHtml(r) + '" tabindex="0" role="button" aria-label="' + escapeHtml(r) + ", " + list.length + ' universities">' +
+        '<span class="zname">' + escapeHtml(r) + '</span>' +
+        '<span class="zcount">' + list.length + '</span>' +
+        '<span class="zlist">' + escapeHtml(names) + '</span></div>';
+    }).join("");
+    grid.querySelectorAll(".zone:not(.zone-empty)").forEach(function (z) {
+      var go = function () { activeRegion = z.dataset.region; setTab("all"); };
+      z.addEventListener("click", go);
+      z.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    });
+  }
+  renderMap();
 })();
 </script>
