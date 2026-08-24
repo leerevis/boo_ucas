@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UK IR &amp; Politics Course Explorer</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --seq-100: #cde2fb; --seq-250: #86b6ef; --seq-400: #3987e5; --seq-500: #256abf; --seq-650: #104281;
+    --cat-1: #2a78d6; /* blue */
+    --cat-2: #eb6834; /* orange */
+    --cat-3: #1baf7a; /* aqua */
+    --cat-4: #eda100; /* yellow */
+    --cat-5: #e87ba4; /* magenta */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --seq-100: #b7d3f6; --seq-250: #6da7ec; --seq-400: #3987e5; --seq-500: #256abf; --seq-650: #104281;
+      --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500; --cat-5: #d55181;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --seq-100: #b7d3f6; --seq-250: #6da7ec; --seq-400: #3987e5; --seq-500: #256abf; --seq-650: #104281;
+    --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500; --cat-5: #d55181;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.45;
+  }
+  a { color: var(--cat-1); }
+
+  header.site {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-1);
+  }
+  header.site h1 { margin: 0 0 4px; font-size: 1.5rem; }
+  header.site p.sub { margin: 0; color: var(--text-secondary); font-size: 0.92rem; }
+  header.site .stats {
+    margin-top: 10px; display: flex; gap: 18px; flex-wrap: wrap;
+    font-size: 0.82rem; color: var(--text-muted);
+  }
+  header.site .stats b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+  nav.tabs {
+    display: flex; gap: 4px; padding: 10px 24px 0; background: var(--surface-1);
+    border-bottom: 1px solid var(--border); flex-wrap: wrap;
+  }
+  nav.tabs button {
+    appearance: none; border: none; background: transparent; cursor: pointer;
+    padding: 10px 16px; font-size: 0.92rem; color: var(--text-secondary);
+    border-bottom: 2px solid transparent; font-family: inherit;
+  }
+  nav.tabs button.active { color: var(--cat-1); border-bottom-color: var(--cat-1); font-weight: 600; }
+  nav.tabs button:hover:not(.active) { color: var(--text-primary); }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 24px 60px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px;
+  }
+
+  input[type="search"], input[type="text"] {
+    font-family: inherit; font-size: 0.92rem; padding: 8px 12px; border-radius: 7px;
+    border: 1px solid var(--border); background: var(--page-plane); color: var(--text-primary);
+    width: 100%;
+  }
+  input[type="search"]:focus, input[type="text"]:focus { outline: 2px solid var(--cat-1); outline-offset: 1px; }
+
+  /* ---------- Browse by theme ---------- */
+  .bucket-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 8px; margin: 16px 0 20px;
+  }
+  .bucket-bar-row {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    padding: 7px 10px; border-radius: 7px; border: 1px solid transparent;
+    background: var(--surface-1);
+  }
+  .bucket-bar-row:hover { border-color: var(--border); }
+  .bucket-bar-row.selected { border-color: var(--cat-1); background: color-mix(in srgb, var(--cat-1) 8%, var(--surface-1)); }
+  .bucket-bar-row .label { flex: 0 0 auto; font-size: 0.82rem; color: var(--text-primary); width: 190px; }
+  .bucket-bar-row .track { flex: 1 1 auto; height: 8px; background: var(--gridline); border-radius: 4px; overflow: hidden; }
+  .bucket-bar-row .fill { height: 100%; background: var(--seq-400); border-radius: 4px; }
+  .bucket-bar-row .count { flex: 0 0 auto; font-size: 0.78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; width: 34px; text-align: right; }
+
+  .module-list { margin-top: 18px; }
+  .module-row {
+    display: grid; grid-template-columns: 1.4fr 1.6fr 0.6fr 0.9fr; gap: 12px;
+    padding: 9px 10px; border-bottom: 1px solid var(--gridline); font-size: 0.85rem; align-items: baseline;
+  }
+  .module-row.head { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); border-bottom: 1px solid var(--baseline); }
+  .module-row .mod-name { color: var(--text-primary); font-weight: 500; }
+  .module-row .course-link { color: var(--text-secondary); font-size: 0.82rem; }
+  .module-row .pill { display: inline-block; font-size: 0.7rem; padding: 2px 7px; border-radius: 999px; background: var(--gridline); color: var(--text-secondary); margin: 1px 3px 1px 0; }
+  .empty-note { color: var(--text-muted); font-size: 0.85rem; padding: 20px 0; }
+
+  /* ---------- Compare ---------- */
+  .compare-picker { margin-bottom: 18px; }
+  .picker-count { font-size: 0.82rem; color: var(--text-muted); margin: 8px 0; }
+  .picker-list { max-height: 260px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; }
+  .picker-row {
+    display: flex; align-items: center; gap: 10px; padding: 7px 12px; font-size: 0.85rem;
+    border-bottom: 1px solid var(--gridline); cursor: pointer;
+  }
+  .picker-row:last-child { border-bottom: none; }
+  .picker-row:hover { background: var(--page-plane); }
+  .picker-row input { flex: 0 0 auto; }
+  .picker-row .pi-name { flex: 1 1 auto; }
+  .picker-row .pi-inst { color: var(--text-muted); font-size: 0.78rem; }
+  .picker-row .pi-badge { font-size: 0.68rem; color: var(--text-muted); }
+  .picker-row.disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .compare-grid {
+    display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin-top: 18px;
+  }
+  .compare-col {
+    flex: 0 0 280px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-1);
+    border-top: 4px solid var(--cat-1); overflow: hidden;
+  }
+  .compare-col .cc-head { padding: 12px 14px 10px; border-bottom: 1px solid var(--gridline); }
+  .compare-col .cc-inst { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); }
+  .compare-col .cc-course { font-size: 0.95rem; font-weight: 600; margin: 2px 0 6px; }
+  .compare-col .cc-link { font-size: 0.78rem; }
+  .compare-col .cc-body { padding: 10px 14px 16px; max-height: 520px; overflow-y: auto; }
+  .compare-col .no-data { color: var(--text-muted); font-size: 0.82rem; padding: 10px 0; }
+  .compare-col .bucket-mini { display: flex; align-items: center; gap: 6px; font-size: 0.74rem; color: var(--text-secondary); margin: 3px 0; }
+  .compare-col .bucket-mini .track { flex: 1 1 auto; height: 6px; background: var(--gridline); border-radius: 3px; overflow: hidden; }
+  .compare-col .bucket-mini .fill { height: 100%; background: var(--seq-400); }
+  .compare-col .bucket-mini .lbl { width: 150px; flex: 0 0 auto; }
+  .compare-col .bucket-mini .n { width: 18px; flex: 0 0 auto; text-align: right; font-variant-numeric: tabular-nums; }
+  .compare-col .year-block { margin-top: 12px; }
+  .compare-col .year-title { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+  .compare-col .mod-item { font-size: 0.8rem; padding: 4px 0; border-bottom: 1px dashed var(--gridline); }
+  .compare-col .mod-item .credits { color: var(--text-muted); font-size: 0.72rem; }
+  .compare-empty { color: var(--text-muted); font-size: 0.88rem; padding: 30px 0; text-align: center; }
+
+  /* ---------- All courses ---------- */
+  table.course-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 14px; }
+  table.course-table th {
+    text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--text-muted); padding: 8px 10px; border-bottom: 1px solid var(--baseline);
+  }
+  table.course-table td { padding: 8px 10px; border-bottom: 1px solid var(--gridline); vertical-align: top; }
+  table.course-table tr:hover td { background: var(--page-plane); }
+  .badge-yes { color: #0ca30c; font-weight: 600; font-size: 0.78rem; }
+  .badge-no { color: var(--text-muted); font-size: 0.78rem; }
+  .add-btn {
+    font-size: 0.72rem; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface-1); color: var(--text-secondary); cursor: pointer; font-family: inherit;
+  }
+  .add-btn:hover { border-color: var(--cat-1); color: var(--cat-1); }
+  .add-btn.added { background: var(--cat-1); color: white; border-color: var(--cat-1); }
+
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
+  .toolbar select {
+    font-family: inherit; font-size: 0.85rem; padding: 7px 10px; border-radius: 7px;
+    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
+  }
+  .results-note { font-size: 0.78rem; color: var(--text-muted); margin: 8px 0; }
+  footer.site { text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 30px 0 10px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>UK IR &amp; Politics Course Explorer</h1>
+  <p class="sub">Compare undergraduate International Relations / Politics degrees by the modules they actually teach.</p>
+  <div class="stats" id="header-stats"></div>
+</header>
+
+<nav class="tabs">
+  <button data-tab="theme" class="active">Browse by Theme</button>
+  <button data-tab="compare">Compare Courses</button>
+  <button data-tab="all">All Courses</button>
+</nav>
+
+<main>
+
+  <!-- THEME PANEL -->
+  <section class="panel active" id="panel-theme">
+    <div class="card">
+      <p class="results-note">Click a theme to see which modules and courses cover it. Data is only available for courses whose module pages we've successfully catalogued so far (see stats above) — everything else links straight to the course page.</p>
+      <div id="bucket-bars"></div>
+    </div>
+    <div class="card module-list" id="module-list-card" style="margin-top:14px; display:none;">
+      <div class="toolbar">
+        <strong id="module-list-title"></strong>
+        <input type="search" id="module-search" placeholder="Filter by module name or institution…" style="max-width:280px;">
+      </div>
+      <div id="module-list-rows"></div>
+    </div>
+  </section>
+
+  <!-- COMPARE PANEL -->
+  <section class="panel" id="panel-compare">
+    <div class="card compare-picker">
+      <input type="search" id="compare-search" placeholder="Search institutions or courses…">
+      <div class="picker-count" id="picker-count">0 of 5 courses selected</div>
+      <div class="picker-list" id="picker-list"></div>
+    </div>
+    <div class="compare-grid" id="compare-grid"></div>
+  </section>
+
+  <!-- ALL COURSES PANEL -->
+  <section class="panel" id="panel-all">
+    <div class="card">
+      <div class="toolbar">
+        <input type="search" id="all-search" placeholder="Search institutions or courses…" style="max-width:280px;">
+        <select id="all-institution-filter"><option value="">All institutions</option></select>
+        <select id="all-modules-filter">
+          <option value="">All courses</option>
+          <option value="yes">Modules catalogued</option>
+          <option value="no">Link only (no module data yet)</option>
+        </select>
+      </div>
+      <div class="results-note" id="all-results-note"></div>
+      <table class="course-table">
+        <thead>
+          <tr><th>Institution</th><th>Course</th><th>Modules</th><th>Compare</th><th>Link</th></tr>
+        </thead>
+        <tbody id="all-course-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">Built from publicly listed course pages · module catalogue is a work in progress, not exhaustive · <span id="footer-note"></span></footer>
+
+<script id="course-data" type="application/json">__DATA_JSON__</script>
+<script>
+(function () {
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("course-data").textContent);
+  var BUCKETS = DATA.buckets;
+  var COURSES = DATA.courses;
+
+  var CAT_COLORS = ["var(--cat-1)", "var(--cat-2)", "var(--cat-3)", "var(--cat-4)", "var(--cat-5)"];
+
+  // ---------- header stats ----------
+  (function renderStats() {
+    var el = document.getElementById("header-stats");
+    el.innerHTML =
+      "<span><b>" + DATA.stats.total_courses + "</b> courses tracked</span>" +
+      "<span><b>" + DATA.institutions.length + "</b> institutions</span>" +
+      "<span><b>" + DATA.stats.courses_with_modules + "</b> courses with a full module catalogue</span>" +
+      "<span><b>" + DATA.stats.total_module_rows.toLocaleString() + "</b> modules catalogued</span>";
+    document.getElementById("footer-note").textContent =
+      DATA.stats.courses_with_modules + " of " + DATA.stats.total_courses + " target courses have catalogued module data.";
+  })();
+
+  // ---------- tabs ----------
+  var tabButtons = document.querySelectorAll("nav.tabs button");
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      tabButtons.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      document.querySelectorAll(".panel").forEach(function (p) { p.classList.remove("active"); });
+      document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  // ============================================================
+  // THEME BROWSE
+  // ============================================================
+  function bucketCounts() {
+    var counts = {};
+    BUCKETS.forEach(function (b) { counts[b] = 0; });
+    COURSES.forEach(function (c) {
+      Object.keys(c.years).forEach(function (y) {
+        c.years[y].forEach(function (m) {
+          m.buckets.forEach(function (b) { counts[b] = (counts[b] || 0) + 1; });
+        });
+      });
+    });
+    return counts;
+  }
+  var BUCKET_COUNTS = bucketCounts();
+  var maxBucketCount = Math.max.apply(null, Object.keys(BUCKET_COUNTS).map(function (k) { return BUCKET_COUNTS[k]; }));
+
+  var selectedBucket = null;
+
+  function renderBucketBars() {
+    var wrap = document.getElementById("bucket-bars");
+    wrap.innerHTML = "";
+    var sorted = BUCKETS.slice().sort(function (a, b) { return BUCKET_COUNTS[b] - BUCKET_COUNTS[a]; });
+    sorted.forEach(function (b) {
+      var row = document.createElement("div");
+      row.className = "bucket-bar-row" + (selectedBucket === b ? " selected" : "");
+      var pct = maxBucketCount ? Math.round((BUCKET_COUNTS[b] / maxBucketCount) * 100) : 0;
+      row.innerHTML =
+        '<span class="label">' + b + '</span>' +
+        '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
+        '<span class="count">' + BUCKET_COUNTS[b] + '</span>';
+      row.addEventListener("click", function () {
+        selectedBucket = (selectedBucket === b) ? null : b;
+        renderBucketBars();
+        renderModuleList();
+      });
+      wrap.appendChild(row);
+    });
+  }
+
+  function moduleSearchText() {
+    return (document.getElementById("module-search").value || "").toLowerCase();
+  }
+
+  function renderModuleList() {
+    var card = document.getElementById("module-list-card");
+    var titleEl = document.getElementById("module-list-title");
+    var rowsEl = document.getElementById("module-list-rows");
+    if (!selectedBucket) { card.style.display = "none"; return; }
+    card.style.display = "block";
+    titleEl.textContent = selectedBucket + " — " + BUCKET_COUNTS[selectedBucket] + " modules";
+
+    var q = moduleSearchText();
+    var rows = [];
+    COURSES.forEach(function (c) {
+      Object.keys(c.years).forEach(function (y) {
+        c.years[y].forEach(function (m) {
+          if (m.buckets.indexOf(selectedBucket) === -1) return;
+          var hay = (m.name + " " + c.institution + " " + c.course_name).toLowerCase();
+          if (q && hay.indexOf(q) === -1) return;
+          rows.push({ mod: m, course: c, year: y });
+        });
+      });
+    });
+    rows.sort(function (a, b) {
+      return a.course.institution.localeCompare(b.course.institution) || a.mod.name.localeCompare(b.mod.name);
+    });
+
+    var html = '<div class="module-row head"><span>Module</span><span>Course</span><span>Year</span><span>Credits</span></div>';
+    if (!rows.length) {
+      html += '<div class="empty-note">No modules match your filter.</div>';
+    } else {
+      rows.forEach(function (r) {
+        html += '<div class="module-row">' +
+          '<span class="mod-name">' + escapeHtml(r.mod.name) + '</span>' +
+          '<span class="course-link"><a href="' + r.course.url + '" target="_blank" rel="noopener">' + escapeHtml(r.course.institution) + ' — ' + escapeHtml(r.course.course_name) + '</a></span>' +
+          '<span>' + escapeHtml(r.year) + '</span>' +
+          '<span>' + escapeHtml(r.mod.credits || "—") + '</span>' +
+          '</div>';
+      });
+    }
+    rowsEl.innerHTML = html;
+  }
+
+  document.getElementById("module-search").addEventListener("input", renderModuleList);
+
+  renderBucketBars();
+
+  // ============================================================
+  // COMPARE
+  // ============================================================
+  var MAX_COMPARE = 5;
+  var selectedIds = [];
+
+  function courseById(id) { return COURSES.filter(function (c) { return c.id === id; })[0]; }
+
+  function renderPicker() {
+    var list = document.getElementById("picker-list");
+    var q = (document.getElementById("compare-search").value || "").toLowerCase();
+    var atMax = selectedIds.length >= MAX_COMPARE;
+    var html = "";
+    COURSES.forEach(function (c) {
+      var hay = (c.institution + " " + c.course_name).toLowerCase();
+      if (q && hay.indexOf(q) === -1) return;
+      var checked = selectedIds.indexOf(c.id) !== -1;
+      var disabled = atMax && !checked;
+      html += '<label class="picker-row' + (disabled ? " disabled" : "") + '" data-id="' + c.id + '">' +
+        '<input type="checkbox" ' + (checked ? "checked" : "") + (disabled ? " disabled" : "") + '>' +
+        '<span class="pi-name">' + escapeHtml(c.institution) + ' — ' + escapeHtml(c.course_name) + '</span>' +
+        '<span class="pi-badge">' + (c.has_modules ? "✓ modules" : "link only") + '</span>' +
+        '</label>';
+    });
+    list.innerHTML = html || '<div class="empty-note" style="padding:14px;">No matches.</div>';
+    // The row is a <label> wrapping the checkbox: clicking anywhere in the
+    // label already toggles the checkbox natively (browser default), so we
+    // only need to react to the resulting "change" event -- listening for
+    // "click" on the row as well would fire the toggle twice (once for the
+    // click, once for the native label->input forward) and cancel itself out.
+    list.querySelectorAll(".picker-row").forEach(function (row) {
+      var cb = row.querySelector("input");
+      cb.addEventListener("change", function () {
+        toggleCourse(row.dataset.id);
+      });
+    });
+    document.getElementById("picker-count").textContent = selectedIds.length + " of " + MAX_COMPARE + " courses selected";
+  }
+
+  function toggleCourse(id) {
+    var idx = selectedIds.indexOf(id);
+    if (idx !== -1) {
+      selectedIds.splice(idx, 1);
+    } else {
+      if (selectedIds.length >= MAX_COMPARE) return;
+      selectedIds.push(id);
+    }
+    renderPicker();
+    renderCompareGrid();
+    renderAllCourseRows();
+  }
+
+  function renderCompareGrid() {
+    var grid = document.getElementById("compare-grid");
+    if (!selectedIds.length) {
+      grid.innerHTML = '<div class="compare-empty">Pick up to 5 courses above to compare their modules side by side.</div>';
+      return;
+    }
+    var html = "";
+    selectedIds.forEach(function (id, i) {
+      var c = courseById(id);
+      var color = CAT_COLORS[i % CAT_COLORS.length];
+      html += '<div class="compare-col" style="border-top-color:' + color + '">';
+      html += '<div class="cc-head">' +
+        '<div class="cc-inst">' + escapeHtml(c.institution) + '</div>' +
+        '<div class="cc-course">' + escapeHtml(c.course_name) + '</div>' +
+        '<div class="cc-link"><a href="' + c.url + '" target="_blank" rel="noopener">View official course page ↗</a></div>' +
+        '</div>';
+      html += '<div class="cc-body">';
+      if (!c.has_modules) {
+        html += '<div class="no-data">Module details aren\'t catalogued for this course yet. Use the official course page link above for the current module list.</div>';
+      } else {
+        var bc = c.bucket_counts;
+        var maxN = Math.max.apply(null, Object.keys(bc).map(function (k) { return bc[k]; }).concat([1]));
+        var bucketsSorted = Object.keys(bc).sort(function (a, b) { return bc[b] - bc[a]; });
+        html += '<div>';
+        bucketsSorted.forEach(function (b) {
+          var pct = Math.round((bc[b] / maxN) * 100);
+          html += '<div class="bucket-mini"><span class="lbl">' + escapeHtml(b) + '</span>' +
+            '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
+            '<span class="n">' + bc[b] + '</span></div>';
+        });
+        html += '</div>';
+        Object.keys(c.years).forEach(function (y) {
+          html += '<div class="year-block"><div class="year-title">' + escapeHtml(y) + '</div>';
+          c.years[y].forEach(function (m) {
+            html += '<div class="mod-item">' + escapeHtml(m.name) +
+              (m.credits ? ' <span class="credits">(' + escapeHtml(m.credits) + ' credits)</span>' : '') +
+              '</div>';
+          });
+          html += '</div>';
+        });
+      }
+      html += '</div></div>';
+    });
+    grid.innerHTML = html;
+  }
+
+  document.getElementById("compare-search").addEventListener("input", renderPicker);
+  renderPicker();
+  renderCompareGrid();
+
+  // ============================================================
+  // ALL COURSES
+  // ============================================================
+  (function populateInstitutionFilter() {
+    var sel = document.getElementById("all-institution-filter");
+    DATA.institutions.forEach(function (inst) {
+      var opt = document.createElement("option");
+      opt.value = inst; opt.textContent = inst;
+      sel.appendChild(opt);
+    });
+  })();
+
+  function renderAllCourseRows() {
+    var q = (document.getElementById("all-search").value || "").toLowerCase();
+    var instFilter = document.getElementById("all-institution-filter").value;
+    var modFilter = document.getElementById("all-modules-filter").value;
+    var tbody = document.getElementById("all-course-rows");
+    var rows = COURSES.filter(function (c) {
+      if (instFilter && c.institution !== instFilter) return false;
+      if (modFilter === "yes" && !c.has_modules) return false;
+      if (modFilter === "no" && c.has_modules) return false;
+      if (q) {
+        var hay = (c.institution + " " + c.course_name).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    document.getElementById("all-results-note").textContent = rows.length + " of " + COURSES.length + " courses shown";
+    var html = "";
+    rows.forEach(function (c) {
+      var inCompare = selectedIds.indexOf(c.id) !== -1;
+      html += "<tr>" +
+        "<td>" + escapeHtml(c.institution) + "</td>" +
+        "<td>" + escapeHtml(c.course_name) + "</td>" +
+        "<td>" + (c.has_modules ? '<span class="badge-yes">✓ ' + c.module_count + ' modules</span>' : '<span class="badge-no">link only</span>') + "</td>" +
+        '<td><button class="add-btn' + (inCompare ? " added" : "") + '" data-id="' + c.id + '">' + (inCompare ? "Added" : "+ Compare") + '</button></td>' +
+        '<td><a href="' + c.url + '" target="_blank" rel="noopener">Course page ↗</a></td>' +
+        "</tr>";
+    });
+    tbody.innerHTML = html;
+    tbody.querySelectorAll(".add-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        toggleCourse(btn.dataset.id);
+      });
+    });
+  }
+
+  ["all-search", "all-institution-filter", "all-modules-filter"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", renderAllCourseRows);
+    document.getElementById(id).addEventListener("change", renderAllCourseRows);
+  });
+  renderAllCourseRows();
+
+  // ---------- utils ----------
+  function escapeHtml(s) {
+    if (s === null || s === undefined) return "";
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+})();
+</script>
+</body>
+</html>
