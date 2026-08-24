@@ -1,259 +1,273 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UK IR &amp; Politics Course Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    color-scheme: light;
-    --surface-1:      #fcfcfb;
-    --page-plane:     #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
-    --baseline:       #c3c2b7;
-    --border:         rgba(11,11,11,0.10);
-    --seq-100: #cde2fb; --seq-250: #86b6ef; --seq-400: #3987e5; --seq-500: #256abf; --seq-650: #104281;
-    --cat-1: #2a78d6; /* blue */
-    --cat-2: #eb6834; /* orange */
-    --cat-3: #1baf7a; /* aqua */
-    --cat-4: #eda100; /* yellow */
-    --cat-5: #e87ba4; /* magenta */
+  :root{
+    --ink:#16233B;
+    --ink-soft:#3B4A63;
+    --paper:#E9EDEC;
+    --paper-raised:#FFFFFF;
+    --paper-sunken:#DDE3E1;
+    --line:#C7CFCC;
+    --brass:#9C7229;
+    --brass-strong:#7E5B1F;
+    --sea:#2F6058;
+    --sea-soft:#DCE7E4;
+    --brick:#9A3B2E;
+    --brick-soft:#F3E1DD;
+    --good:#2E6B4F;
+    --good-soft:#DEEBE3;
+    --shadow: 0 1px 2px rgba(22,35,59,0.06), 0 6px 20px -8px rgba(22,35,59,0.18);
+    --radius: 10px;
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --sans: "Public Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      color-scheme: dark;
-      --surface-1:      #1a1a19;
-      --page-plane:     #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
-      --baseline:       #383835;
-      --border:         rgba(255,255,255,0.10);
-      --seq-100: #b7d3f6; --seq-250: #6da7ec; --seq-400: #3987e5; --seq-500: #256abf; --seq-650: #104281;
-      --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500; --cat-5: #d55181;
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDE9DD; --ink-soft:#B9BFC9; --paper:#121821; --paper-raised:#1A222E; --paper-sunken:#0D121A;
+      --line:#2C3846; --brass:#D6AB55; --brass-strong:#E8C377; --sea:#6FA89E; --sea-soft:#1B2E2C;
+      --brick:#DD8B7C; --brick-soft:#3A2320; --good:#7FC29E; --good-soft:#17291F;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 30px -10px rgba(0,0,0,0.55);
     }
   }
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --surface-1:      #1a1a19;
-    --page-plane:     #0d0d0d;
-    --text-primary:   #ffffff;
-    --text-secondary: #c3c2b7;
-    --text-muted:     #898781;
-    --gridline:       #2c2c2a;
-    --baseline:       #383835;
-    --border:         rgba(255,255,255,0.10);
-    --seq-100: #b7d3f6; --seq-250: #6da7ec; --seq-400: #3987e5; --seq-500: #256abf; --seq-650: #104281;
-    --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500; --cat-5: #d55181;
+  :root[data-theme="dark"]{
+    --ink:#EDE9DD; --ink-soft:#B9BFC9; --paper:#121821; --paper-raised:#1A222E; --paper-sunken:#0D121A;
+    --line:#2C3846; --brass:#D6AB55; --brass-strong:#E8C377; --sea:#6FA89E; --sea-soft:#1B2E2C;
+    --brick:#DD8B7C; --brick-soft:#3A2320; --good:#7FC29E; --good-soft:#17291F;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 30px -10px rgba(0,0,0,0.55);
   }
 
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    background: var(--page-plane);
-    color: var(--text-primary);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    line-height: 1.45;
+  *{ box-sizing:border-box; }
+  ::selection{ background:var(--brass); color:var(--paper-raised); }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
   }
-  a { color: var(--cat-1); }
+  a{ color:var(--sea); }
+  h1,h2,h3{ font-family:var(--serif); text-wrap:balance; margin:0; color:var(--ink); }
+  button, select, input{ font-family:var(--sans); }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:2px; }
+  .tabular{ font-variant-numeric:tabular-nums; font-family:var(--mono); }
 
-  header.site {
-    padding: 28px 24px 20px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface-1);
+  /* ---------- Masthead ---------- */
+  .masthead{ border-bottom:1px solid var(--line); background:var(--paper-raised); }
+  .masthead-inner{
+    max-width:1180px; margin:0 auto; padding:28px 24px 20px;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
   }
-  header.site h1 { margin: 0 0 4px; font-size: 1.5rem; }
-  header.site p.sub { margin: 0; color: var(--text-secondary); font-size: 0.92rem; }
-  header.site .stats {
-    margin-top: 10px; display: flex; gap: 18px; flex-wrap: wrap;
-    font-size: 0.82rem; color: var(--text-muted);
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .mark{ width:40px; height:40px; flex:none; }
+  .brand h1{ font-size:26px; font-weight:600; letter-spacing:0.2px; }
+  .brand .eyebrow{
+    font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--brass-strong); margin:0 0 2px;
   }
-  header.site .stats b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .masthead-meta{ font-size:13px; color:var(--ink-soft); max-width:460px; text-align:right; line-height:1.5; }
+  .masthead-meta strong{ color:var(--ink); }
 
-  nav.tabs {
-    display: flex; gap: 4px; padding: 10px 24px 0; background: var(--surface-1);
-    border-bottom: 1px solid var(--border); flex-wrap: wrap;
+  /* ---------- Controls ---------- */
+  .controls{ position:sticky; top:0; z-index:20; background:var(--paper); border-bottom:1px solid var(--line); }
+  .controls-inner{ max-width:1180px; margin:0 auto; padding:14px 24px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .search-wrap{ position:relative; flex:1 1 260px; min-width:200px; }
+  .search-wrap svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:0.55; }
+  input[type="search"], input[type="text"]{
+    width:100%; padding:10px 12px 10px 36px; border-radius:8px; border:1px solid var(--line);
+    background:var(--paper-raised); color:var(--ink); font-size:14px;
   }
-  nav.tabs button {
-    appearance: none; border: none; background: transparent; cursor: pointer;
-    padding: 10px 16px; font-size: 0.92rem; color: var(--text-secondary);
-    border-bottom: 2px solid transparent; font-family: inherit;
+  select{ padding:10px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink); font-size:14px; }
+  .view-toggle{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; flex:none; }
+  .view-toggle button{
+    border:0; background:var(--paper-raised); color:var(--ink-soft); padding:9px 14px; font-size:13px; font-weight:600;
+    cursor:pointer; border-right:1px solid var(--line);
   }
-  nav.tabs button.active { color: var(--cat-1); border-bottom-color: var(--cat-1); font-weight: 600; }
-  nav.tabs button:hover:not(.active) { color: var(--text-primary); }
+  .view-toggle button:last-child{ border-right:0; }
+  .view-toggle button[aria-pressed="true"]{ background:var(--ink); color:var(--paper); }
+  .result-count{ font-size:12.5px; color:var(--ink-soft); white-space:nowrap; margin-left:auto; padding-left:8px; }
 
-  main { max-width: 1180px; margin: 0 auto; padding: 20px 24px 60px; }
-  .panel { display: none; }
-  .panel.active { display: block; }
+  main{ max-width:1180px; margin:0 auto; padding:24px 24px 40px; }
+  .view-panel[hidden]{ display:none; }
 
-  .card {
-    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px;
-    padding: 16px 18px;
+  .stats-strip{
+    display:flex; gap:22px; flex-wrap:wrap; padding:14px 0 20px; font-size:12.5px; color:var(--ink-soft);
   }
+  .stats-strip b{ font-family:var(--mono); color:var(--ink); font-size:13.5px; font-weight:600; }
 
-  input[type="search"], input[type="text"] {
-    font-family: inherit; font-size: 0.92rem; padding: 8px 12px; border-radius: 7px;
-    border: 1px solid var(--border); background: var(--page-plane); color: var(--text-primary);
-    width: 100%;
-  }
-  input[type="search"]:focus, input[type="text"]:focus { outline: 2px solid var(--cat-1); outline-offset: 1px; }
+  .lede{ font-size:13.5px; color:var(--ink-soft); max-width:760px; margin:0 0 18px; line-height:1.55; }
 
-  /* ---------- Browse by theme ---------- */
-  .bucket-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 8px; margin: 16px 0 20px;
+  /* ---------- Theme bars ---------- */
+  .theme-card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px; }
+  .bucket-bar-row{
+    display:flex; align-items:center; gap:10px; cursor:pointer; padding:8px 10px; border-radius:8px;
+    border:1px solid transparent; margin-bottom:2px;
   }
-  .bucket-bar-row {
-    display: flex; align-items: center; gap: 8px; cursor: pointer;
-    padding: 7px 10px; border-radius: 7px; border: 1px solid transparent;
-    background: var(--surface-1);
-  }
-  .bucket-bar-row:hover { border-color: var(--border); }
-  .bucket-bar-row.selected { border-color: var(--cat-1); background: color-mix(in srgb, var(--cat-1) 8%, var(--surface-1)); }
-  .bucket-bar-row .label { flex: 0 0 auto; font-size: 0.82rem; color: var(--text-primary); width: 190px; }
-  .bucket-bar-row .track { flex: 1 1 auto; height: 8px; background: var(--gridline); border-radius: 4px; overflow: hidden; }
-  .bucket-bar-row .fill { height: 100%; background: var(--seq-400); border-radius: 4px; }
-  .bucket-bar-row .count { flex: 0 0 auto; font-size: 0.78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; width: 34px; text-align: right; }
+  .bucket-bar-row:hover{ background:var(--paper-sunken); }
+  .bucket-bar-row.selected{ border-color:var(--bucket-color, var(--brass)); background:var(--paper-sunken); }
+  .bucket-bar-row .swatch{ width:9px; height:9px; border-radius:2px; background:var(--bucket-color, var(--brass)); flex:none; }
+  .bucket-bar-row .label{ flex:0 0 auto; font-size:13px; color:var(--ink); width:230px; }
+  .bucket-bar-row .track{ flex:1 1 auto; height:8px; background:var(--paper-sunken); border-radius:4px; overflow:hidden; }
+  .bucket-bar-row .fill{ height:100%; background:var(--bucket-color, var(--brass)); border-radius:4px; }
+  .bucket-bar-row .count{ flex:0 0 auto; font-size:12.5px; color:var(--ink-soft); width:34px; text-align:right; }
 
-  .module-list { margin-top: 18px; }
-  .module-row {
-    display: grid; grid-template-columns: 1.4fr 1.6fr 0.6fr 0.9fr; gap: 12px;
-    padding: 9px 10px; border-bottom: 1px solid var(--gridline); font-size: 0.85rem; align-items: baseline;
+  /* ---------- Table view (shared: module list + all-courses) ---------- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised); box-shadow:var(--shadow); }
+  table{ border-collapse:collapse; width:100%; min-width:700px; font-size:13.5px; }
+  thead th{
+    text-align:left; padding:11px 14px; background:var(--paper-sunken); font-size:11px;
+    font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); white-space:nowrap;
+    border-bottom:1px solid var(--line); position:sticky; top:0;
   }
-  .module-row.head { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); border-bottom: 1px solid var(--baseline); }
-  .module-row .mod-name { color: var(--text-primary); font-weight: 500; }
-  .module-row .course-link { color: var(--text-secondary); font-size: 0.82rem; }
-  .module-row .pill { display: inline-block; font-size: 0.7rem; padding: 2px 7px; border-radius: 999px; background: var(--gridline); color: var(--text-secondary); margin: 1px 3px 1px 0; }
-  .empty-note { color: var(--text-muted); font-size: 0.85rem; padding: 20px 0; }
+  tbody td{ padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:0; }
+  tbody tr:hover{ background:var(--paper-sunken); }
+  td.mod-cell .c{ font-weight:600; color:var(--ink); }
+  td.course-cell{ max-width:280px; }
+  td.course-cell .c{ font-weight:600; }
+  td.course-cell .u{ font-size:11.5px; color:var(--ink-soft); }
+  .pill{ font-size:11px; font-weight:600; padding:3px 8px; border-radius:100px; background:var(--paper-sunken); color:var(--ink-soft); display:inline-block; margin:1px 3px 1px 0; }
+  .badge-yes{ color:var(--good); font-weight:700; font-size:12px; }
+  .badge-no{ color:var(--ink-soft); font-size:12px; }
+  .add-btn{
+    font-size:11.5px; padding:4px 10px; border-radius:100px; border:1px solid var(--line);
+    background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; font-weight:600;
+  }
+  .add-btn:hover{ border-color:var(--brass); color:var(--brass-strong); }
+  .add-btn.added{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .empty-state{ text-align:center; padding:50px 20px; color:var(--ink-soft); }
+  .empty-state h3{ font-size:19px; margin-bottom:6px; }
 
   /* ---------- Compare ---------- */
-  .compare-picker { margin-bottom: 18px; }
-  .picker-count { font-size: 0.82rem; color: var(--text-muted); margin: 8px 0; }
-  .picker-list { max-height: 260px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; }
-  .picker-row {
-    display: flex; align-items: center; gap: 10px; padding: 7px 12px; font-size: 0.85rem;
-    border-bottom: 1px solid var(--gridline); cursor: pointer;
-  }
-  .picker-row:last-child { border-bottom: none; }
-  .picker-row:hover { background: var(--page-plane); }
-  .picker-row input { flex: 0 0 auto; }
-  .picker-row .pi-name { flex: 1 1 auto; }
-  .picker-row .pi-inst { color: var(--text-muted); font-size: 0.78rem; }
-  .picker-row .pi-badge { font-size: 0.68rem; color: var(--text-muted); }
-  .picker-row.disabled { opacity: 0.4; cursor: not-allowed; }
+  .picker-count{ font-size:12.5px; color:var(--ink-soft); margin:10px 2px 0; }
+  .picker-list{ max-height:280px; overflow-y:auto; border:1px solid var(--line); border-radius:8px; margin-top:8px; background:var(--paper-raised); }
+  .picker-row{ display:flex; align-items:center; gap:10px; padding:8px 12px; font-size:13.5px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .picker-row:last-child{ border-bottom:none; }
+  .picker-row:hover{ background:var(--paper-sunken); }
+  .picker-row .pi-name{ flex:1 1 auto; }
+  .picker-row .pi-badge{ font-size:11px; color:var(--ink-soft); }
+  .picker-row.disabled{ opacity:0.4; cursor:not-allowed; }
 
-  .compare-grid {
-    display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin-top: 18px;
+  .compare-grid{ display:flex; gap:16px; overflow-x:auto; padding:22px 2px 8px; }
+  .compare-col{
+    flex:0 0 290px; background:var(--paper-raised); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column;
   }
-  .compare-col {
-    flex: 0 0 280px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-1);
-    border-top: 4px solid var(--cat-1); overflow: hidden;
+  .compare-col .card-top{ display:flex; gap:12px; padding:16px 16px 12px; border-left:4px solid var(--slot-color, var(--brass)); }
+  .compare-col .rank-badge{
+    flex:none; width:34px; height:34px; border-radius:8px; background:var(--paper-sunken);
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:600; font-size:13px; color:var(--ink-soft);
   }
-  .compare-col .cc-head { padding: 12px 14px 10px; border-bottom: 1px solid var(--gridline); }
-  .compare-col .cc-inst { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); }
-  .compare-col .cc-course { font-size: 0.95rem; font-weight: 600; margin: 2px 0 6px; }
-  .compare-col .cc-link { font-size: 0.78rem; }
-  .compare-col .cc-body { padding: 10px 14px 16px; max-height: 520px; overflow-y: auto; }
-  .compare-col .no-data { color: var(--text-muted); font-size: 0.82rem; padding: 10px 0; }
-  .compare-col .bucket-mini { display: flex; align-items: center; gap: 6px; font-size: 0.74rem; color: var(--text-secondary); margin: 3px 0; }
-  .compare-col .bucket-mini .track { flex: 1 1 auto; height: 6px; background: var(--gridline); border-radius: 3px; overflow: hidden; }
-  .compare-col .bucket-mini .fill { height: 100%; background: var(--seq-400); }
-  .compare-col .bucket-mini .lbl { width: 150px; flex: 0 0 auto; }
-  .compare-col .bucket-mini .n { width: 18px; flex: 0 0 auto; text-align: right; font-variant-numeric: tabular-nums; }
-  .compare-col .year-block { margin-top: 12px; }
-  .compare-col .year-title { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
-  .compare-col .mod-item { font-size: 0.8rem; padding: 4px 0; border-bottom: 1px dashed var(--gridline); }
-  .compare-col .mod-item .credits { color: var(--text-muted); font-size: 0.72rem; }
-  .compare-empty { color: var(--text-muted); font-size: 0.88rem; padding: 30px 0; text-align: center; }
+  .compare-col .inst-name{ font-family:var(--sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--sea); margin-bottom:3px; }
+  .compare-col h3{ font-size:15.5px; font-weight:600; line-height:1.3; }
+  .compare-col .cc-link{ padding:0 16px 12px; font-size:12px; }
+  .compare-col .cc-body{ padding:0 16px 16px; border-top:1px solid var(--line); flex:1 1 auto; max-height:520px; overflow-y:auto; }
+  .compare-col .no-data{ color:var(--ink-soft); font-size:13px; padding:14px 0; line-height:1.5; }
+  .compare-col .bucket-mini{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-soft); margin:8px 0 0; }
+  .compare-col .bucket-mini .swatch{ width:7px; height:7px; border-radius:2px; flex:none; }
+  .compare-col .bucket-mini .track{ flex:1 1 auto; height:6px; background:var(--paper-sunken); border-radius:3px; overflow:hidden; }
+  .compare-col .bucket-mini .fill{ height:100%; }
+  .compare-col .bucket-mini .lbl{ width:140px; flex:0 0 auto; }
+  .compare-col .bucket-mini .n{ width:16px; flex:0 0 auto; text-align:right; font-family:var(--mono); }
+  .compare-col h4{
+    font-family:var(--sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--brass-strong); margin:16px 0 6px;
+  }
+  .compare-col h4:first-of-type{ margin-top:16px; }
+  .compare-col .mod-item{ font-size:13px; padding:5px 0; border-bottom:1px dashed var(--line); color:var(--ink); }
+  .compare-col .mod-item .credits{ color:var(--ink-soft); font-size:11.5px; }
+  .compare-empty{ color:var(--ink-soft); font-size:14px; padding:40px 0; text-align:center; }
 
-  /* ---------- All courses ---------- */
-  table.course-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 14px; }
-  table.course-table th {
-    text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em;
-    color: var(--text-muted); padding: 8px 10px; border-bottom: 1px solid var(--baseline);
+  .toolbar{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+  footer{
+    border-top:1px solid var(--line); padding:28px 24px 40px; margin-top:20px;
+    max-width:1180px; margin-left:auto; margin-right:auto; font-size:12.5px; color:var(--ink-soft); line-height:1.6;
   }
-  table.course-table td { padding: 8px 10px; border-bottom: 1px solid var(--gridline); vertical-align: top; }
-  table.course-table tr:hover td { background: var(--page-plane); }
-  .badge-yes { color: #0ca30c; font-weight: 600; font-size: 0.78rem; }
-  .badge-no { color: var(--text-muted); font-size: 0.78rem; }
-  .add-btn {
-    font-size: 0.72rem; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--border);
-    background: var(--surface-1); color: var(--text-secondary); cursor: pointer; font-family: inherit;
-  }
-  .add-btn:hover { border-color: var(--cat-1); color: var(--cat-1); }
-  .add-btn.added { background: var(--cat-1); color: white; border-color: var(--cat-1); }
-
-  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
-  .toolbar select {
-    font-family: inherit; font-size: 0.85rem; padding: 7px 10px; border-radius: 7px;
-    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
-  }
-  .results-note { font-size: 0.78rem; color: var(--text-muted); margin: 8px 0; }
-  footer.site { text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 30px 0 10px; }
+  footer a{ color:var(--sea); }
+  @media (max-width:640px){ .masthead-meta{ text-align:left; max-width:none; } }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
 </style>
-</head>
-<body>
 
-<header class="site">
-  <h1>UK IR &amp; Politics Course Explorer</h1>
-  <p class="sub">Compare undergraduate International Relations / Politics degrees by the modules they actually teach.</p>
-  <div class="stats" id="header-stats"></div>
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="18.5" stroke="var(--brass)" stroke-width="1.4"/>
+        <circle cx="20" cy="20" r="2.4" fill="var(--brass)"/>
+        <path d="M20 3 L20 10 M20 30 L20 37 M3 20 L10 20 M30 20 L37 20" stroke="var(--brass)" stroke-width="1.4"/>
+        <path d="M20 20 L28 9" stroke="var(--sea)" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <p class="eyebrow">Module-level course data</p>
+        <h1>UK IR &amp; Politics Course Explorer</h1>
+      </div>
+    </div>
+    <p class="masthead-meta" id="masthead-meta"></p>
+  </div>
 </header>
 
-<nav class="tabs">
-  <button data-tab="theme" class="active">Browse by Theme</button>
-  <button data-tab="compare">Compare Courses</button>
-  <button data-tab="all">All Courses</button>
-</nav>
+<div class="controls">
+  <div class="controls-inner">
+    <div class="view-toggle" role="group" aria-label="Section">
+      <button data-tab="theme" aria-pressed="true">Browse by Theme</button>
+      <button data-tab="compare" aria-pressed="false">Compare Courses</button>
+      <button data-tab="all" aria-pressed="false">All Courses</button>
+    </div>
+    <span class="result-count" id="header-count"></span>
+  </div>
+</div>
 
 <main>
 
   <!-- THEME PANEL -->
-  <section class="panel active" id="panel-theme">
-    <div class="card">
-      <p class="results-note">Click a theme to see which modules and courses cover it. Data is only available for courses whose module pages we've successfully catalogued so far (see stats above) — everything else links straight to the course page.</p>
-      <div id="bucket-bars"></div>
-    </div>
-    <div class="card module-list" id="module-list-card" style="margin-top:14px; display:none;">
+  <section class="view-panel" id="panel-theme">
+    <p class="lede">Click a theme below to see which modules and courses cover it. Only courses whose module pages we've successfully catalogued appear here — everything else shows up under "All Courses" with a link straight to the department's page.</p>
+    <div class="theme-card"><div id="bucket-bars"></div></div>
+    <div id="module-list-wrap" style="margin-top:20px; display:none;">
       <div class="toolbar">
         <strong id="module-list-title"></strong>
-        <input type="search" id="module-search" placeholder="Filter by module name or institution…" style="max-width:280px;">
+        <div class="search-wrap" style="max-width:280px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="search" id="module-search" placeholder="Filter by module or institution…">
+        </div>
       </div>
-      <div id="module-list-rows"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Module</th><th>Course</th><th>Year</th><th>Credits</th></tr></thead>
+          <tbody id="module-list-rows"></tbody>
+        </table>
+      </div>
     </div>
   </section>
 
   <!-- COMPARE PANEL -->
-  <section class="panel" id="panel-compare">
-    <div class="card compare-picker">
-      <input type="search" id="compare-search" placeholder="Search institutions or courses…">
-      <div class="picker-count" id="picker-count">0 of 5 courses selected</div>
-      <div class="picker-list" id="picker-list"></div>
-    </div>
+  <section class="view-panel" id="panel-compare" hidden>
+    <p class="lede">Pick up to five courses to see their modules side by side, grouped by theme and by year.</p>
+    <div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" id="compare-search" placeholder="Search institutions or courses…"></div>
+    <div class="picker-count" id="picker-count">0 of 5 courses selected</div>
+    <div class="picker-list" id="picker-list"></div>
     <div class="compare-grid" id="compare-grid"></div>
   </section>
 
   <!-- ALL COURSES PANEL -->
-  <section class="panel" id="panel-all">
-    <div class="card">
-      <div class="toolbar">
-        <input type="search" id="all-search" placeholder="Search institutions or courses…" style="max-width:280px;">
-        <select id="all-institution-filter"><option value="">All institutions</option></select>
-        <select id="all-modules-filter">
-          <option value="">All courses</option>
-          <option value="yes">Modules catalogued</option>
-          <option value="no">Link only (no module data yet)</option>
-        </select>
+  <section class="view-panel" id="panel-all" hidden>
+    <div class="toolbar">
+      <div class="search-wrap" style="max-width:280px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="all-search" placeholder="Search institutions or courses…">
       </div>
-      <div class="results-note" id="all-results-note"></div>
-      <table class="course-table">
-        <thead>
-          <tr><th>Institution</th><th>Course</th><th>Modules</th><th>Compare</th><th>Link</th></tr>
-        </thead>
+      <select id="all-institution-filter"><option value="">All institutions</option></select>
+      <select id="all-modules-filter">
+        <option value="">All courses</option>
+        <option value="yes">Modules catalogued</option>
+        <option value="no">Link only (no module data yet)</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Institution</th><th>Course</th><th>Modules</th><th>Compare</th><th>Link</th></tr></thead>
         <tbody id="all-course-rows"></tbody>
       </table>
     </div>
@@ -261,38 +275,66 @@
 
 </main>
 
-<footer class="site">Built from publicly listed course pages · module catalogue is a work in progress, not exhaustive · <span id="footer-note"></span></footer>
+<footer>
+  <strong>About this data.</strong> 267 UK undergraduate International Relations / Politics courses are tracked;
+  module lists are pulled directly from each university's own course page and sorted into the sixteen themes above.
+  Coverage is a work in progress — a course without a catalogued module list links straight to its official page
+  instead. Module pages are not always kept current by universities, so always confirm the live syllabus before
+  applying.
+</footer>
 
-<script id="course-data" type="application/json">__DATA_JSON__</script>
+<div id="dataStore" hidden>__DATA_JSON__</div>
+
 <script>
 (function () {
   "use strict";
-  var DATA = JSON.parse(document.getElementById("course-data").textContent);
+  var DATA = JSON.parse(document.getElementById("dataStore").textContent);
   var BUCKETS = DATA.buckets;
   var COURSES = DATA.courses;
 
-  var CAT_COLORS = ["var(--cat-1)", "var(--cat-2)", "var(--cat-3)", "var(--cat-4)", "var(--cat-5)"];
+  var BUCKET_COLOR = {
+    "Security & Conflict": "#9A3B2E",
+    "IR Theory & Global Order": "#5B7FBF",
+    "International Political Economy": "#3EAA8F",
+    "Comparative & British Politics": "#9C7229",
+    "Political Theory & Philosophy": "#7A5CC9",
+    "Human Rights & Humanitarianism": "#2F6058",
+    "Regional & Area Studies": "#C99A3E",
+    "Diplomacy & Foreign Policy": "#6E7FE0",
+    "Law": "#4C9EC9",
+    "Gender, Identity & Society": "#B85C9E",
+    "Environment & Sustainability": "#2E6B4F",
+    "Media, Communication & Culture": "#C9683E",
+    "Research Methods & Dissertation": "#8E9E3E",
+    "Language & Area Language Modules": "#3C9E7A",
+    "Skills, Placement & Employability": "#7E5B1F",
+    "Sociology & History": "#6E5A8E"
+  };
+  var SLOT_COLORS = ["#5B7FBF", "#9A3B2E", "#3EAA8F", "#C99A3E", "#B85C9E"];
 
-  // ---------- header stats ----------
-  (function renderStats() {
-    var el = document.getElementById("header-stats");
-    el.innerHTML =
-      "<span><b>" + DATA.stats.total_courses + "</b> courses tracked</span>" +
-      "<span><b>" + DATA.institutions.length + "</b> institutions</span>" +
-      "<span><b>" + DATA.stats.courses_with_modules + "</b> courses with a full module catalogue</span>" +
-      "<span><b>" + DATA.stats.total_module_rows.toLocaleString() + "</b> modules catalogued</span>";
-    document.getElementById("footer-note").textContent =
-      DATA.stats.courses_with_modules + " of " + DATA.stats.total_courses + " target courses have catalogued module data.";
-  })();
+  function esc(s) {
+    if (s === null || s === undefined) return "";
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------- masthead ----------
+  document.getElementById("masthead-meta").innerHTML =
+    "<strong>" + DATA.institutions.length + " UK universities</strong> offering International Relations / Politics, " +
+    "compared by the modules they teach &mdash; " + DATA.stats.courses_with_modules + " of " + DATA.stats.total_courses +
+    " target courses catalogued so far.";
+  document.getElementById("header-count").textContent = COURSES.length + " courses";
 
   // ---------- tabs ----------
-  var tabButtons = document.querySelectorAll("nav.tabs button");
+  var tabButtons = document.querySelectorAll(".view-toggle button[data-tab]");
   tabButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
-      tabButtons.forEach(function (b) { b.classList.remove("active"); });
-      btn.classList.add("active");
-      document.querySelectorAll(".panel").forEach(function (p) { p.classList.remove("active"); });
-      document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+      tabButtons.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+      ["theme", "compare", "all"].forEach(function (t) {
+        document.getElementById("panel-" + t).hidden = (t !== btn.dataset.tab);
+      });
     });
   });
 
@@ -313,7 +355,6 @@
   }
   var BUCKET_COUNTS = bucketCounts();
   var maxBucketCount = Math.max.apply(null, Object.keys(BUCKET_COUNTS).map(function (k) { return BUCKET_COUNTS[k]; }));
-
   var selectedBucket = null;
 
   function renderBucketBars() {
@@ -323,11 +364,13 @@
     sorted.forEach(function (b) {
       var row = document.createElement("div");
       row.className = "bucket-bar-row" + (selectedBucket === b ? " selected" : "");
+      row.style.setProperty("--bucket-color", BUCKET_COLOR[b] || "var(--brass)");
       var pct = maxBucketCount ? Math.round((BUCKET_COUNTS[b] / maxBucketCount) * 100) : 0;
       row.innerHTML =
-        '<span class="label">' + b + '</span>' +
+        '<span class="swatch"></span>' +
+        '<span class="label">' + esc(b) + '</span>' +
         '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
-        '<span class="count">' + BUCKET_COUNTS[b] + '</span>';
+        '<span class="count tabular">' + BUCKET_COUNTS[b] + '</span>';
       row.addEventListener("click", function () {
         selectedBucket = (selectedBucket === b) ? null : b;
         renderBucketBars();
@@ -337,19 +380,15 @@
     });
   }
 
-  function moduleSearchText() {
-    return (document.getElementById("module-search").value || "").toLowerCase();
-  }
-
   function renderModuleList() {
-    var card = document.getElementById("module-list-card");
+    var wrap = document.getElementById("module-list-wrap");
     var titleEl = document.getElementById("module-list-title");
     var rowsEl = document.getElementById("module-list-rows");
-    if (!selectedBucket) { card.style.display = "none"; return; }
-    card.style.display = "block";
+    if (!selectedBucket) { wrap.style.display = "none"; return; }
+    wrap.style.display = "block";
     titleEl.textContent = selectedBucket + " — " + BUCKET_COUNTS[selectedBucket] + " modules";
 
-    var q = moduleSearchText();
+    var q = (document.getElementById("module-search").value || "").toLowerCase();
     var rows = [];
     COURSES.forEach(function (c) {
       Object.keys(c.years).forEach(function (y) {
@@ -365,24 +404,21 @@
       return a.course.institution.localeCompare(b.course.institution) || a.mod.name.localeCompare(b.mod.name);
     });
 
-    var html = '<div class="module-row head"><span>Module</span><span>Course</span><span>Year</span><span>Credits</span></div>';
     if (!rows.length) {
-      html += '<div class="empty-note">No modules match your filter.</div>';
-    } else {
-      rows.forEach(function (r) {
-        html += '<div class="module-row">' +
-          '<span class="mod-name">' + escapeHtml(r.mod.name) + '</span>' +
-          '<span class="course-link"><a href="' + r.course.url + '" target="_blank" rel="noopener">' + escapeHtml(r.course.institution) + ' — ' + escapeHtml(r.course.course_name) + '</a></span>' +
-          '<span>' + escapeHtml(r.year) + '</span>' +
-          '<span>' + escapeHtml(r.mod.credits || "—") + '</span>' +
-          '</div>';
-      });
+      rowsEl.innerHTML = '<tr><td colspan="4"><div class="empty-state"><h3>No modules match</h3><p>Try a different search term.</p></div></td></tr>';
+      return;
     }
-    rowsEl.innerHTML = html;
+    rowsEl.innerHTML = rows.map(function (r) {
+      return '<tr>' +
+        '<td class="mod-cell"><div class="c">' + esc(r.mod.name) + '</div></td>' +
+        '<td class="course-cell"><a href="' + esc(r.course.url) + '" target="_blank" rel="noopener"><div class="c">' + esc(r.course.institution) + '</div></a><div class="u">' + esc(r.course.course_name) + '</div></td>' +
+        '<td>' + esc(r.year) + '</td>' +
+        '<td class="tabular">' + esc(r.mod.credits || "—") + '</td>' +
+        '</tr>';
+    }).join("");
   }
 
   document.getElementById("module-search").addEventListener("input", renderModuleList);
-
   renderBucketBars();
 
   // ============================================================
@@ -405,33 +441,22 @@
       var disabled = atMax && !checked;
       html += '<label class="picker-row' + (disabled ? " disabled" : "") + '" data-id="' + c.id + '">' +
         '<input type="checkbox" ' + (checked ? "checked" : "") + (disabled ? " disabled" : "") + '>' +
-        '<span class="pi-name">' + escapeHtml(c.institution) + ' — ' + escapeHtml(c.course_name) + '</span>' +
+        '<span class="pi-name">' + esc(c.institution) + ' — ' + esc(c.course_name) + '</span>' +
         '<span class="pi-badge">' + (c.has_modules ? "✓ modules" : "link only") + '</span>' +
         '</label>';
     });
-    list.innerHTML = html || '<div class="empty-note" style="padding:14px;">No matches.</div>';
-    // The row is a <label> wrapping the checkbox: clicking anywhere in the
-    // label already toggles the checkbox natively (browser default), so we
-    // only need to react to the resulting "change" event -- listening for
-    // "click" on the row as well would fire the toggle twice (once for the
-    // click, once for the native label->input forward) and cancel itself out.
+    list.innerHTML = html || '<div class="empty-state" style="padding:20px;"><h3>No matches</h3></div>';
     list.querySelectorAll(".picker-row").forEach(function (row) {
       var cb = row.querySelector("input");
-      cb.addEventListener("change", function () {
-        toggleCourse(row.dataset.id);
-      });
+      cb.addEventListener("change", function () { toggleCourse(row.dataset.id); });
     });
     document.getElementById("picker-count").textContent = selectedIds.length + " of " + MAX_COMPARE + " courses selected";
   }
 
   function toggleCourse(id) {
     var idx = selectedIds.indexOf(id);
-    if (idx !== -1) {
-      selectedIds.splice(idx, 1);
-    } else {
-      if (selectedIds.length >= MAX_COMPARE) return;
-      selectedIds.push(id);
-    }
+    if (idx !== -1) { selectedIds.splice(idx, 1); }
+    else { if (selectedIds.length >= MAX_COMPARE) return; selectedIds.push(id); }
     renderPicker();
     renderCompareGrid();
     renderAllCourseRows();
@@ -446,39 +471,37 @@
     var html = "";
     selectedIds.forEach(function (id, i) {
       var c = courseById(id);
-      var color = CAT_COLORS[i % CAT_COLORS.length];
-      html += '<div class="compare-col" style="border-top-color:' + color + '">';
-      html += '<div class="cc-head">' +
-        '<div class="cc-inst">' + escapeHtml(c.institution) + '</div>' +
-        '<div class="cc-course">' + escapeHtml(c.course_name) + '</div>' +
-        '<div class="cc-link"><a href="' + c.url + '" target="_blank" rel="noopener">View official course page ↗</a></div>' +
+      var color = SLOT_COLORS[i % SLOT_COLORS.length];
+      html += '<article class="compare-col" style="--slot-color:' + color + '">';
+      html += '<div class="card-top">' +
+        '<div class="rank-badge">' + (i + 1) + '</div>' +
+        '<div><div class="inst-name">' + esc(c.institution) + '</div><h3>' + esc(c.course_name) + '</h3></div>' +
         '</div>';
+      html += '<div class="cc-link"><a href="' + esc(c.url) + '" target="_blank" rel="noopener">Course page ↗</a></div>';
       html += '<div class="cc-body">';
       if (!c.has_modules) {
-        html += '<div class="no-data">Module details aren\'t catalogued for this course yet. Use the official course page link above for the current module list.</div>';
+        html += '<div class="no-data">Module details aren\'t catalogued for this course yet. Use the course page link above for the current module list.</div>';
       } else {
         var bc = c.bucket_counts;
         var maxN = Math.max.apply(null, Object.keys(bc).map(function (k) { return bc[k]; }).concat([1]));
         var bucketsSorted = Object.keys(bc).sort(function (a, b) { return bc[b] - bc[a]; });
-        html += '<div>';
         bucketsSorted.forEach(function (b) {
           var pct = Math.round((bc[b] / maxN) * 100);
-          html += '<div class="bucket-mini"><span class="lbl">' + escapeHtml(b) + '</span>' +
-            '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
+          html += '<div class="bucket-mini"><span class="swatch" style="background:' + (BUCKET_COLOR[b] || "var(--brass)") + '"></span>' +
+            '<span class="lbl">' + esc(b) + '</span>' +
+            '<span class="track"><span class="fill" style="width:' + pct + '%;background:' + (BUCKET_COLOR[b] || "var(--brass)") + '"></span></span>' +
             '<span class="n">' + bc[b] + '</span></div>';
         });
-        html += '</div>';
         Object.keys(c.years).forEach(function (y) {
-          html += '<div class="year-block"><div class="year-title">' + escapeHtml(y) + '</div>';
+          html += '<h4>' + esc(y) + '</h4>';
           c.years[y].forEach(function (m) {
-            html += '<div class="mod-item">' + escapeHtml(m.name) +
-              (m.credits ? ' <span class="credits">(' + escapeHtml(m.credits) + ' credits)</span>' : '') +
+            html += '<div class="mod-item">' + esc(m.name) +
+              (m.credits ? ' <span class="credits">(' + esc(m.credits) + ' credits)</span>' : '') +
               '</div>';
           });
-          html += '</div>';
         });
       }
-      html += '</div></div>';
+      html += '</div></article>';
     });
     grid.innerHTML = html;
   }
@@ -514,23 +537,20 @@
       }
       return true;
     });
-    document.getElementById("all-results-note").textContent = rows.length + " of " + COURSES.length + " courses shown";
     var html = "";
     rows.forEach(function (c) {
       var inCompare = selectedIds.indexOf(c.id) !== -1;
       html += "<tr>" +
-        "<td>" + escapeHtml(c.institution) + "</td>" +
-        "<td>" + escapeHtml(c.course_name) + "</td>" +
+        "<td>" + esc(c.institution) + "</td>" +
+        '<td class="course-cell"><div class="c">' + esc(c.course_name) + "</div></td>" +
         "<td>" + (c.has_modules ? '<span class="badge-yes">✓ ' + c.module_count + ' modules</span>' : '<span class="badge-no">link only</span>') + "</td>" +
         '<td><button class="add-btn' + (inCompare ? " added" : "") + '" data-id="' + c.id + '">' + (inCompare ? "Added" : "+ Compare") + '</button></td>' +
-        '<td><a href="' + c.url + '" target="_blank" rel="noopener">Course page ↗</a></td>' +
+        '<td><a href="' + esc(c.url) + '" target="_blank" rel="noopener">Course page ↗</a></td>' +
         "</tr>";
     });
-    tbody.innerHTML = html;
+    tbody.innerHTML = rows.length ? html : '<tr><td colspan="5"><div class="empty-state"><h3>No courses match</h3><p>Try a different search term or filter.</p></div></td></tr>';
     tbody.querySelectorAll(".add-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        toggleCourse(btn.dataset.id);
-      });
+      btn.addEventListener("click", function () { toggleCourse(btn.dataset.id); });
     });
   }
 
@@ -539,15 +559,5 @@
     document.getElementById(id).addEventListener("change", renderAllCourseRows);
   });
   renderAllCourseRows();
-
-  // ---------- utils ----------
-  function escapeHtml(s) {
-    if (s === null || s === undefined) return "";
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  }
 })();
 </script>
-</body>
-</html>
